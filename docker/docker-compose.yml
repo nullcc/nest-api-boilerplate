@@ -1,0 +1,21 @@
+services:
+  nest-api-boilerplate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - APP_SECRET=
+      - DB_HOST=
+      - DB_PORT=
+      - DB_USERNAME=
+      - DB_PASSWORD=
+      - DB_NAME=
+      - LDAP_URL=
+      - LDAP_BIND_DN=
+      - LDAP_BIND_CREDENTIALS=
+      - LDAP_SEARCH_BASE=
+      - LDAP_SEARCH_FILTER=

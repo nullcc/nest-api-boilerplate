@@ -16,7 +16,7 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
           searchBase: process.env.LDAP_SEARCH_BASE,
           searchFilter: process.env.LDAP_SEARCH_FILTER,
         },
-        usernameField: 'name',
+        usernameField: 'email',
       },
       async (req: Request, user: any, done) => {
         const userData = { name: user.uid, email: user.mail };

@@ -10,12 +10,8 @@ import { IsUserAlreadyExist } from '@modules/user/validators/is-user-already-exi
 
 export class SignUp {
   @IsDefined()
-  @IsNotEmpty()
-  @Validate(IsUserAlreadyExist)
-  readonly name: string;
-
-  @IsDefined()
   @IsEmail()
+  @Validate(IsUserAlreadyExist)
   readonly email: string;
 
   @IsDefined()

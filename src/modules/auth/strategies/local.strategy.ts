@@ -9,12 +9,12 @@ import { User } from '@modules/user/entities/user.entity';
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   constructor(private readonly authService: AuthService) {
     super({
-      usernameField: 'name',
+      usernameField: 'email',
       passReqToCallback: false,
     });
   }
 
-  validate(name: string, password: string): Promise<User> {
-    return this.authService.login(name, password);
+  validate(email: string, password: string): Promise<User> {
+    return this.authService.login(email, password);
   }
 }

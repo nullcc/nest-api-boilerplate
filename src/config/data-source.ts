@@ -2,7 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
 
 import { User } from '@modules/user/entities/user.entity';
-import { userFactory } from '@modules/user/factories/user.factory';
+import { userFactory } from '@modules/user/testing/user.factory';
 import { UserSeeder } from '@modules/user/testing/user.seeder';
 import { CreateUser1557166726050 } from '@modules/user/migrations/1557166726050-CreateUser';
 

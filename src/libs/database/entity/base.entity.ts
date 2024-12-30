@@ -10,14 +10,9 @@ export class BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn({
-    type: 'datetime',
-    update: false,
-  })
+  @CreateDateColumn({ update: false })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    type: 'datetime',
-  })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

@@ -10,11 +10,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - APP_SECRET=
-      - DB_HOST=
-      - DB_PORT=
-      - DB_USERNAME=
-      - DB_PASSWORD=
-      - DB_NAME=
+      - DATABASE_URL=
       - LDAP_URL=
       - LDAP_BIND_DN=
       - LDAP_BIND_CREDENTIALS=

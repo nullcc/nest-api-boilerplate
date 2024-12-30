@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    env_file: .env
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 5s
+    networks:
+      - pgweb
+
+  pgweb:
+    container_name: pgweb
+    image: sosedoff/pgweb:latest
+    build: .
+    environment:
+      PGWEB_DATABASE_URL: postgres://postgres:postgres@postgres:5432/nestjs?sslmode=disable
+    ports:
+      - 8081:8081
+    networks:
+      - pgweb
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "127.0.0.1", "8081"]
+      interval: 5s
+
+  integresql:
+    container_name: integresql
+    image: ghcr.io/allaboutapps/integresql:latest
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    environment:
+      INTEGRESQL_PGHOST: postgres
+      INTEGRESQL_PGUSER: $POSTGRES_USER
+      INTEGRESQL_PGPASSWORD: $POSTGRES_PASSWORD
+#       INTEGRESQL_PGDATABASE: nestjs
+    networks:
+      - pgweb
+
+volumes:
+  data:
+    name: postgres
+
+networks:
+  pgweb:
+    name: pgweb

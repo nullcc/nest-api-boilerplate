@@ -1,8 +1,9 @@
 services:
   nest-api-boilerplate:
     build:
-      context: .
       dockerfile: Dockerfile
+      image: nest-api-boilerplate
+      container_name: nest-api-boilerplate
     ports:
       - "3000:3000"
     environment:

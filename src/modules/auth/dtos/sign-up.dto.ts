@@ -15,6 +15,9 @@ export class SignUp {
   readonly email: string;
 
   @IsDefined()
+  readonly name: string;
+
+  @IsDefined()
   @IsNotEmpty()
   @MinLength(8)
   readonly password: string;

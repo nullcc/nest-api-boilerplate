@@ -1,19 +1,19 @@
-import { ValidationPipe, HttpStatus, INestApplication } from '@nestjs/common';
+import { join } from 'path';
+import { ValidationPipe, HttpStatus } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import passport from 'passport';
 
+import { middleware } from './app.middleware';
 import { AppModule } from './app.module';
 
-export function setup(app: INestApplication): INestApplication {
-  // Logger config
+const setupLogger = (app: NestExpressApplication) => {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+};
 
-  // API docs
+const setupApiDoc = (app: NestExpressApplication) => {
   const config = new DocumentBuilder()
     .setTitle('Nest API Boilerplate')
     .setDescription('Nest API Boilerplate API Description')
@@ -31,8 +31,9 @@ export function setup(app: INestApplication): INestApplication {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
+};
 
-  // HTTP data entity validation
+const setupGlobalPipes = (app: NestExpressApplication) => {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -40,29 +41,26 @@ export function setup(app: INestApplication): INestApplication {
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
     }),
   );
+};
 
-  app.use(cookieParser(process.env.APP_SECRET));
-  app.use(
-    session({
-      secret: process.env.APP_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        httpOnly: true,
-        signed: true,
-        sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
-      },
-    }),
-  );
-  app.use(passport.initialize());
-  app.use(passport.session());
+const setupViewEngine = (app: NestExpressApplication) => {
+  app.useStaticAssets(join(__dirname, '../public', 'assets'));
+  app.setBaseViewsDir(join(__dirname, '../public', 'views'));
+  app.setViewEngine('ejs');
+};
 
-  app.enableCors({
-    origin: process.env.ALLOWED_ORIGINS?.split(/\s*,\s*/) ?? '*',
-    credentials: true,
-    exposedHeaders: ['Authorization'],
-  });
+export function setup(app: NestExpressApplication): NestExpressApplication {
+  setupLogger(app);
+
+  setupApiDoc(app);
+
+  setupGlobalPipes(app);
+
+  setupViewEngine(app);
+
+  middleware(app);
+
+  app.enableShutdownHooks();
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 

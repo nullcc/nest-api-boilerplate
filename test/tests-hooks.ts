@@ -1,5 +1,5 @@
 import { IntegreSQLClient } from '@devoxa/integresql-client';
-import type { INestApplication } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { getConfigToken } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
@@ -41,7 +41,7 @@ export async function initializeIntegreSQL() {
   return hash;
 }
 
-export async function bootstrapApp(hash: string): Promise<INestApplication> {
+export async function bootstrapApp(hash: string): Promise<NestExpressApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   })
@@ -63,7 +63,7 @@ export async function bootstrapApp(hash: string): Promise<INestApplication> {
     })
     .compile();
 
-  const app = moduleFixture.createNestApplication();
+  const app = moduleFixture.createNestApplication<NestExpressApplication>();
 
   setup(app);
 

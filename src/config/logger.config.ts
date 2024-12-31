@@ -27,8 +27,6 @@ export const loggerOptions: Params = {
       autoLogging: {
         ignore: (req) => passUrl.has((<Request>req).originalUrl),
       },
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       customProps: (req) => (<Request>req).customProps,
     },
     multistream(

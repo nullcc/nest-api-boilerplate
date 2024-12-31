@@ -10,7 +10,7 @@ import typeORMconfig from '@config/typeorm';
 import { HealthModule } from '@modules/health/health.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UserModule } from '@modules/user/user.module';
-import { HealthController } from '@modules/health/health.controller';
+import { AppController } from '@src/app.controller';
 
 @Module({
   imports: [
@@ -42,7 +42,7 @@ import { HealthController } from '@modules/health/health.controller';
     AuthModule,
     UserModule,
   ],
-  controllers: [HealthController],
+  controllers: [AppController],
   providers: [Logger],
 })
 export class AppModule {}

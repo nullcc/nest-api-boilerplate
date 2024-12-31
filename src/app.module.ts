@@ -1,10 +1,11 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { TerminusModule } from '@nestjs/terminus';
 
-import { LoggerFactory } from '@libs/logger/logger.factory';
+import { loggerOptions } from '@config/logger.config';
 import typeORMconfig from '@config/typeorm';
 import { HealthModule } from '@modules/health/health.module';
 import { AuthModule } from '@modules/auth/auth.module';
@@ -17,18 +18,24 @@ import { HealthController } from '@modules/health/health.controller';
       expandVariables: true,
       isGlobal: true,
     }),
-    LoggerModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => {
-        const loggerFactory = new LoggerFactory(config);
-        return loggerFactory.create();
-      },
-    }),
+    // https://getpino.io
+    // https://github.com/iamolegga/nestjs-pino
+    LoggerModule.forRoot(loggerOptions),
+    // Database
+    // https://docs.nestjs.com/techniques/database
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(typeORMconfig)],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        configService.getOrThrow('typeorm'),
+      useFactory: (config: ConfigService) => ({
+        ...config.get<TypeOrmModuleOptions>('typeorm'),
+      }),
+    }),
+    // Static Folder
+    // https://docs.nestjs.com/recipes/serve-static
+    // https://docs.nestjs.com/techniques/mvc
+    ServeStaticModule.forRoot({
+      rootPath: `${__dirname}/../public`,
+      renderPath: '/',
     }),
     TerminusModule,
     HealthModule,

@@ -1,11 +1,38 @@
 import { ValidationPipe, HttpStatus, INestApplication } from '@nestjs/common';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
+
 import { AppModule } from './app.module';
 
 export function setup(app: INestApplication): INestApplication {
+  // Logger config
+  app.useLogger(app.get(Logger));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+
+  // API docs
+  const config = new DocumentBuilder()
+    .setTitle('Nest API Boilerplate')
+    .setDescription('Nest API Boilerplate API Description')
+    .setVersion('1.0')
+    .addTag('Nest API Boilerplate')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      in: 'header',
+      name: 'Authorization',
+      description: 'Enter your Bearer token',
+    })
+    .addSecurityRequirements('bearer')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document);
+
+  // HTTP data entity validation
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -15,16 +42,11 @@ export function setup(app: INestApplication): INestApplication {
   );
 
   app.use(cookieParser(process.env.APP_SECRET));
-
   app.use(
     session({
-      secret: process.env.APP_SECRET as string,
+      secret: process.env.APP_SECRET,
       resave: false,
       saveUninitialized: false,
-      store:
-        process.env.NODE_ENV === 'production'
-          ? new session.MemoryStore()
-          : new session.MemoryStore(),
       cookie: {
         httpOnly: true,
         signed: true,
@@ -33,7 +55,6 @@ export function setup(app: INestApplication): INestApplication {
       },
     }),
   );
-
   app.use(passport.initialize());
   app.use(passport.session());
 

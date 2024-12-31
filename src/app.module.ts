@@ -1,14 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { LoggerModule } from 'nestjs-pino';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TerminusModule } from '@nestjs/terminus';
 
-import { dataSourceOptions } from '@config/data-source';
+import { LoggerFactory } from '@libs/logger/logger.factory';
+import typeORMconfig from '@config/typeorm';
 import { HealthModule } from '@modules/health/health.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UserModule } from '@modules/user/user.module';
 import { HealthController } from '@modules/health/health.controller';
-import typeORMconfig from '@config/typeorm';
 
 @Module({
   imports: [
@@ -16,7 +17,13 @@ import typeORMconfig from '@config/typeorm';
       expandVariables: true,
       isGlobal: true,
     }),
-    // TypeOrmModule.forRoot(dataSourceOptions),
+    LoggerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        const loggerFactory = new LoggerFactory(config);
+        return loggerFactory.create();
+      },
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(typeORMconfig)],
       inject: [ConfigService],
@@ -29,5 +36,6 @@ import typeORMconfig from '@config/typeorm';
     UserModule,
   ],
   controllers: [HealthController],
+  providers: [Logger],
 })
 export class AppModule {}

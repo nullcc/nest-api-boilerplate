@@ -6,6 +6,7 @@ import {
   DiskHealthIndicator,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock } from 'ts-auto-mock';
 
@@ -17,6 +18,7 @@ describe('HealthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
+      providers: [Logger],
     })
       .useMocker((token) => {
         const getStatus = (key: string) => ({ [key]: { status: 'up' } });

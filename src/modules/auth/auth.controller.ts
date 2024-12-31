@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Logger,
   Post,
   UseGuards,
   UseInterceptors,
@@ -21,7 +22,10 @@ import { JWTAuthGuard } from './guards/jwt-auth.guard';
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly logger: Logger,
+  ) {}
 
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)

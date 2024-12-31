@@ -24,6 +24,7 @@ export default {
       moduleDirectories: ['node_modules', __dirname],
       moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
       preset: 'ts-jest',
+      setupFilesAfterEnv: ['../jest.setup.js'],
     },
     {
       displayName: 'E2E',
@@ -45,6 +46,7 @@ export default {
       moduleDirectories: ['node_modules', __dirname],
       moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
       preset: 'ts-jest',
+      setupFilesAfterEnv: ['../jest.setup.js'],
     },
   ],
 };

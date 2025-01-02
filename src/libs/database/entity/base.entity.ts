@@ -11,8 +11,8 @@ export class BaseEntity {
   id: number;
 
   @CreateDateColumn({ update: false })
-  createdAt: Date;
+  readonly createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  readonly updatedAt: Date;
 }

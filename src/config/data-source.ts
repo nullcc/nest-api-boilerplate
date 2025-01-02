@@ -1,22 +1,19 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
 
-import { User } from '@modules/user/entities/user.entity';
-import { userFactory } from '@modules/user/testing/user.factory';
-import { UserSeeder } from '@modules/user/testing/user.seeder';
-import { CreateUser1557166726050 } from '@modules/user/migrations/1557166726050-CreateUser';
+import UserSeeder from '@modules/user/testing/user.seeder';
 
 export const dataSourceOptions: DataSourceOptions & SeederOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.DATABASE_HOST,
+  port: parseInt(process.env.DATABASE_PORT, 10),
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   synchronize: false,
-  entities: [User],
-  migrations: [CreateUser1557166726050],
-  factories: [userFactory],
+  entities: [__dirname + '/../**/entities/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/../**/migrations/*{.ts,.js}'],
+  factories: [__dirname + '/../**/testing/*.factory{.ts,.js}'],
   seeds: [UserSeeder],
   extra: {
     ssl:

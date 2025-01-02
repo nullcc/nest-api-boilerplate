@@ -113,3 +113,13 @@ $ npm run test:e2e
 ```shell
 $ npm run test
 ```
+
+## 其他
+
+### 1. 使用交互式环境
+
+REPL(Read-Eval-Print-Loop) 是一个交互式环境，它接受单用户输入，执行它们，并将结果返回给用户。REPL 功能允许你直接从终端检查依赖关系图并调用提供者（和控制器）上的方法：
+
+```shell
+$ npm run start:repl
+```

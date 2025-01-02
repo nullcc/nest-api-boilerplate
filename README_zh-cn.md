@@ -33,8 +33,8 @@ $ npm install
 为了能快速在开发环境下开始工作，这里提供了一些开发环境需要用到的服务，它们将运行在 docker 容器中：
 
 * postgres
-* pgweb
-* integresql
+* [pgweb](https://github.com/sosedoff/pgweb)
+* [integresql](https://github.com/allaboutapps/integresql)
 
 ```shell
 $ docker-compose -f docker-compose-dev-infra.yml up

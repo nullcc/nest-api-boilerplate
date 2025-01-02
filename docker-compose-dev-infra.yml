@@ -13,7 +13,7 @@ services:
       test: pg_isready -U postgres -h 127.0.0.1
       interval: 5s
     networks:
-      - pgweb
+      - nest-api-boilerplate
 
   pgweb:
     container_name: pgweb
@@ -24,7 +24,7 @@ services:
     ports:
       - 8081:8081
     networks:
-      - pgweb
+      - nest-api-boilerplate
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,12 +45,12 @@ services:
       INTEGRESQL_PGPASSWORD: $POSTGRES_PASSWORD
       INTEGRESQL_PGDATABASE: $POSTGRES_DB
     networks:
-      - pgweb
+      - nest-api-boilerplate
 
 volumes:
   data:
     name: postgres
 
 networks:
-  pgweb:
-    name: pgweb
+  nest-api-boilerplate:
+    name: nest-api-boilerplate

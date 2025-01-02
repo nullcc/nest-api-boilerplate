@@ -7,12 +7,21 @@ import { users } from './user.fixtures';
 export default class UserSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     factoryManager: SeederFactoryManager,
   ): Promise<void> {
-    await dataSource.manager.upsert(User, users, {
-      conflictPaths: ['id'],
-      upsertType: 'on-conflict-do-update',
-    });
+    const repository = dataSource.getRepository(User);
+    await repository.insert(users);
+
+    // save entities defined by fixture file
+    const userFactory = factoryManager.get(User);
+    for (const user of users) {
+      await userFactory.save(user);
+    }
+
+    // save 1 factory generated entity, to the database
+    await userFactory.save();
+
+    // save 5 factory generated entities, to the database
+    await userFactory.saveMany(5);
   }
 }

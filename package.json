@@ -20,10 +20,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:unit": "jest --config jest.config.ts --selectProjects Unit",
     "test:e2e": "jest --config jest.config.ts --selectProjects E2E",
-    "db:create": "ts-node -r dotenv-mono/load -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs db:create -r src/config --synchronize=no --initialDatabase=postgres",
-    "db:drop": "ts-node -r dotenv-mono/load -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs db:drop -r src/config --initialDatabase=postgres",
-    "db:seed": "ts-node -r dotenv-mono/load -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs seed:run -r src/config",
-    "typeorm": "NODE_OPTIONS='-r dotenv-mono/load -r tsconfig-paths/register' typeorm-ts-node-commonjs -d src/config/data-source"
+    "db:create": "npx ts-node -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs db:create -d src/config/data-source --synchronize no",
+    "db:drop": "npx ts-node -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs db:drop -d src/config/data-source",
+    "seed:run": "npx ts-node -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/config/data-source",
+    "migration:generate": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/config/data-source ./src/database/migrations/migration",
+    "migration:run": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/config/data-source",
+    "migration:revert": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/config/data-source"
   },
   "dependencies": {
     "@nestjs/axios": "^3.1.3",

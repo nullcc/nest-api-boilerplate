@@ -1,6 +1,6 @@
 # Nest API Boilerplate
 
-本项目旨在提供一个以 [nestjs](https://nestjs.com/) 为基础的 API 工程模版，已经包含了或即将包含如下基本功能：
+本项目旨在提供一个以 [nestjs](https://nestjs.com/) 为基础的 API 工程模版，它已经包含或即将包含如下基本功能：
 
 * Database
   * Migrations
@@ -30,11 +30,13 @@ $ npm install
 
 ### 2. 启动开发环境基础设施
 
-为了能快速在开发环境下开始工作，这里提供了一些开发环境需要用到的服务，它们将运行在 docker 容器中：
+为了能快速在开发环境下开始工作，这里提供了一些开发环境需要用到的服务，它们将运行在 docker 容器中。
 
 * postgres
 * [pgweb](https://github.com/sosedoff/pgweb)
 * [integresql](https://github.com/allaboutapps/integresql)
+
+运行以下命令启动上述所有基础服务：
 
 ```shell
 $ docker-compose -f docker-compose-dev-infra.yml up

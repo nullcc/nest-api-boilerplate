@@ -1,5 +1,6 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 
+// @ts-ignore
 import { compilerOptions } from './tsconfig.json';
 
 export default {
@@ -20,7 +21,7 @@ export default {
       },
       coverageDirectory: '../coverage',
       testEnvironment: 'node',
-      setupFiles: ['dotenv-mono/load', 'jest-ts-auto-mock'],
+      setupFiles: ['<rootDir>/config/env.ts', 'jest-ts-auto-mock'],
       moduleDirectories: ['node_modules', __dirname],
       moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
       preset: 'ts-jest',
@@ -42,7 +43,7 @@ export default {
       },
       coverageDirectory: '../coverage',
       testEnvironment: 'node',
-      setupFiles: ['dotenv-mono/load', 'jest-ts-auto-mock'],
+      setupFiles: ['<rootDir>/../src/config/env.ts', 'jest-ts-auto-mock'],
       moduleDirectories: ['node_modules', __dirname],
       moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
       preset: 'ts-jest',

@@ -28,7 +28,21 @@
 $ npm install
 ```
 
-### 2. 启动开发环境基础设施
+### 2. 环境变量配置
+
+本项目模版中预置了三个环境变量文件，它们的优先级如下：
+
+.env.local > .env.development > .env
+
+如果你希望修改默认的环境变量优先级，或者定义新的环境变量优先级，可以修改 `src/config/env.ts` 文件。 要创建环境变量文件，可以从 `.env.example`文件复制得来：
+
+```shell
+$ cp .env.example .env
+```
+
+你可以根据需要修改配置。
+
+### 3. 启动开发环境基础设施
 
 为了能快速在开发环境下开始工作，这里提供了一些开发环境需要用到的服务，它们将运行在 docker 容器中。
 
@@ -39,10 +53,10 @@ $ npm install
 运行以下命令启动上述所有基础服务：
 
 ```shell
-$ docker-compose -f docker-compose-dev-infra.yml up
+$ docker-compose -f docker-compose-dev-infra.yml --env-file .env up
 ```
 
-### 3. 初始化开发环境数据库
+### 4. 初始化开发环境数据库
 
 创建开发环境数据库：
 
@@ -50,7 +64,7 @@ $ docker-compose -f docker-compose-dev-infra.yml up
 $ npm run db:create
 ```
 
-### 4. 运行数据库迁移脚本
+### 5. 运行数据库迁移脚本
 
 由于新搭建的开发环境中的开发数据库是全新的，没有任何模式，因此需要运行积累的迁移脚本来更新数据库模式：
 
@@ -58,7 +72,7 @@ $ npm run db:create
 $ npm run migration:run
 ```
 
-### 5. 为数据库添加数据种子（可选）
+### 6. 为数据库添加数据种子（可选）
 
 这个步骤是可选的。如果项目中已经定义了一些数据种子，运行如下脚本可以快速将一些初始数据同步到数据库中：
 
@@ -125,7 +139,7 @@ $ npm run migration:generate
 $ npm run migration:revert
 ```
 
-需要注意的是，每运行一次该命令，只会撤销最近一次的数据库迁移脚本，如果你需要撤销多次，需要连续运行该脚本相应的次数。
+需要注意的是，每运行一次该命令，只会还原最近一次的数据库迁移脚本，如果你需要还原多次，需要连续运行该脚本相应的次数。
 
 ## 其他
 

@@ -14,8 +14,10 @@ import { AppController } from '@src/app.controller';
 
 @Module({
   imports: [
+    // Configuration
+    // https://docs.nestjs.com/techniques/configuration
     ConfigModule.forRoot({
-      expandVariables: true,
+      envFilePath: `${process.env.APP_ENV || ''}.env`,
       isGlobal: true,
     }),
     // https://getpino.io

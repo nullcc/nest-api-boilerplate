@@ -4,7 +4,10 @@ services:
   postgres:
     container_name: postgres
     image: postgres:15
-    env_file: .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD:  ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
       - 5432:5432
     volumes:
@@ -20,7 +23,7 @@ services:
     image: sosedoff/pgweb:latest
     build: .
     environment:
-      PGWEB_DATABASE_URL: postgres://postgres:postgres@postgres:5432/nestjs?sslmode=disable
+      PGWEB_DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:${DATABASE_PORT}/${DATABASE_NAME}?sslmode=disable"
     ports:
       - 8081:8081
     networks:
@@ -41,9 +44,9 @@ services:
       - postgres
     environment:
       INTEGRESQL_PGHOST: postgres
-      INTEGRESQL_PGUSER: $POSTGRES_USER
-      INTEGRESQL_PGPASSWORD: $POSTGRES_PASSWORD
-      INTEGRESQL_PGDATABASE: $POSTGRES_DB
+      INTEGRESQL_PGUSER: ${DATABASE_USER}
+      INTEGRESQL_PGPASSWORD: ${DATABASE_PASSWORD}
+      INTEGRESQL_PGDATABASE: ${DATABASE_NAME}
     networks:
       - nest-api-boilerplate
 

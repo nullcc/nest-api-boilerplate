@@ -1,6 +1,8 @@
 import { Logger, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -12,14 +14,19 @@ import { SessionSerializer } from './session.serializer';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.APP_SECRET,
-      signOptions: {
-        expiresIn: '1d',
-        algorithm: 'HS384',
-      },
-      verifyOptions: {
-        algorithms: ['HS384'],
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          secret: config.get<string>('APP_SECRET'),
+          signOptions: {
+            expiresIn: '1d',
+            algorithm: 'HS384',
+          },
+          verifyOptions: {
+            algorithms: ['HS384'],
+          },
+        };
       },
     }),
     UserModule,

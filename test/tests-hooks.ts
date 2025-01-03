@@ -15,8 +15,8 @@ const client = new IntegreSQLClient({
 
 export async function initializeIntegreSQL() {
   const hash = await client.hashFiles([
-    './src/**/migrations/*.ts',
-    './src/**/testing/*.ts',
+    './src/database/migrations/*.ts',
+    './src/modules/**/testing/*.ts',
     './src/config/data-source.ts',
   ]);
 

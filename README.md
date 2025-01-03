@@ -28,7 +28,21 @@ This project aims to provide an API project boilerplate based on [nestjs](https:
 $ npm install
 ```
 
-### 2. Initiate the development environment infrastructure
+### 2. Environment variable configuration
+
+There are three environment variable files pre-set in this project template, and their priority is as follows:
+
+.env.local > .env.development > .env
+
+If you want to modify the default environment variable priority or define a new environment variable priority, you can modify the `src/config/env.ts` file. To create an environment variable file, you can copy it from the `.env.example` file:
+
+```shell
+$ cp .env.example .env
+```
+
+You can modify the configuration as needed.
+
+### 3. Initiate the development environment infrastructure
 
 In order to quickly start working in the development environment, here are some services that the development environment needs to use, which will run in Docker containers.
 
@@ -39,10 +53,10 @@ In order to quickly start working in the development environment, here are some 
 Run the following command to start all the basic services mentioned above:
 
 ```shell
-$ docker-compose -f docker-compose-dev-infra.yml up
+$ docker-compose -f docker-compose-dev-infra.yml --env-file .env up
 ```
 
-### 3. Initialize the development environment database
+### 4. Initialize the development environment database
 
 Create a development environment database:
 
@@ -50,7 +64,7 @@ Create a development environment database:
 $ npm run db:create
 ```
 
-### 4. Run database migration script
+### 5. Run database migration script
 
 Due to the fact that the development database in the newly built development environment is brand new and has no schema, it is necessary to run the accumulated migration scripts to update the database schema:
 
@@ -58,7 +72,7 @@ Due to the fact that the development database in the newly built development env
 $ npm run migration:run
 ```
 
-### 5. Add data seeds to the database (optional)
+### 6. Add data seeds to the database (optional)
 
 This step is optional. If some data seeds have already been defined in the project, running the following script can quickly synchronize some initial data to the database:
 

@@ -66,29 +66,20 @@ $ npm run migration:run
 $ npm run seed:run
 ```
 
-## 数据库迁移
+## 编译并运行项目
 
-### 1. 新建
+```bash
+# development
+$ npm run start
 
-当你修改了任何数据库实体的代码，具体来说就是被 typeorm 提供的 `@Entity()` 装饰过的那些类，可以运行以下脚本来让 typeorm 自动生成数据库迁移脚本：
+# watch mode
+$ npm run start:dev
 
-```shell
-$ npm run migration:generate
+# production mode
+$ npm run start:prod
 ```
 
-生成的数据库迁移脚本将被放置在 `src/database/migrations/` 目录下。
-
-### 2. 撤销
-
-如果你想撤销最近一次的数据库迁移脚本，可以运行如下命令：
-
-```shell
-$ npm run migration:revert
-```
-
-需要注意的是，每运行一次该命令，只会撤销最近一次的数据库迁移脚本，如果你需要撤销多次，需要连续运行该脚本相应的次数。
-
-## 测试
+## 运行测试
 
 ### 1. 单元测试
 
@@ -113,6 +104,28 @@ $ npm run test:e2e
 ```shell
 $ npm run test
 ```
+
+## 数据库迁移
+
+### 1. 新建
+
+当你修改了任何数据库实体的代码，具体来说就是被 typeorm 提供的 `@Entity()` 装饰过的那些类，可以运行以下脚本来让 typeorm 自动生成数据库迁移脚本：
+
+```shell
+$ npm run migration:generate
+```
+
+生成的数据库迁移脚本将被放置在 `src/database/migrations/` 目录下。
+
+### 2. 撤销
+
+如果你想撤销最近一次的数据库迁移脚本，可以运行如下命令：
+
+```shell
+$ npm run migration:revert
+```
+
+需要注意的是，每运行一次该命令，只会撤销最近一次的数据库迁移脚本，如果你需要撤销多次，需要连续运行该脚本相应的次数。
 
 ## 其他
 

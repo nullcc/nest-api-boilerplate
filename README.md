@@ -1,35 +1,69 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Nest API Boilerplate
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project aims to provide an API project boilerplate based on [nestjs](https://nestjs.com/), which already includes or will soon include the following basic functions:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+* Database
+  * Migrations
+* API
+  * Authentication
+    * Passport
+      * Local strategy
+      * LDAP strategy
+      * JWT strategy
+  * Authorization (TBD)
+  * Health check
+    * orm
+    * memory
+    * disk
+    * http
+* Testing
+  * Unit testing framework
+  * E2E testing framework
 
-## Description
+## Development environment preparation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 1. Install dependencies
 
-## Project setup
-
-```bash
+```shell
 $ npm install
+```
+
+### 2. Initiate the development environment infrastructure
+
+In order to quickly start working in the development environment, here are some services that the development environment needs to use, which will run in Docker containers.
+
+* postgres
+* [pgweb](https://github.com/sosedoff/pgweb)
+* [integresql](https://github.com/allaboutapps/integresql)
+
+Run the following command to start all the basic services mentioned above:
+
+```shell
+$ docker-compose -f docker-compose-dev-infra.yml up
+```
+
+### 3. Initialize the development environment database
+
+Create a development environment database:
+
+```shell
+$ npm run db:create
+```
+
+### 4. Run database migration script
+
+Due to the fact that the development database in the newly built development environment is brand new and has no schema, it is necessary to run the accumulated migration scripts to update the database schema:
+
+```shell
+$ npm run migration:run
+```
+
+### 5. Add data seeds to the database (optional)
+
+This step is optional. If some data seeds have already been defined in the project, running the following script can quickly synchronize some initial data to the database:
+
+```shell
+$ npm run seed:run
 ```
 
 ## Compile and run the project
@@ -47,53 +81,58 @@ $ npm run start:prod
 
 ## Run tests
 
-```bash
-# unit tests
-$ npm run test
+### 1. Unit Test
 
-# e2e tests
+Unit test files are usually placed in the same directory as functional code. In this project template, there are all files in the `src` directory that end with `.spec.ts`. Run unit tests:
+
+```shell
+$ npm run test:unit
+```
+
+### 2. E2E Test
+
+E2E testing files are generally not placed together with functional code. In this project template, they are all files in the `test` directory that end with `.e2e-spec.ts`. Run end-to-end testing:
+
+```shell
 $ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Deployment
+### 3. All Test
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Run all tests at once without distinguishing test types:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+```shell
+$ npm run test
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Migrations
 
-## Resources
+### 1. Generate
 
-Check out a few resources that may come in handy when working with NestJS:
+When you modify the code of any database entity, specifically the classes decorated with the `@Entity()` provided by typeorm, you can run the following script to have typeorm automatically generate a database migration script:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```shell
+$ npm run migration:generate
+```
 
-## Support
+The generated database migration script will be placed in the `src/database/migrations/` directory.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 2. Revoke
 
-## Stay in touch
+If you want to undo the latest database migration script, you can run the following command:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```shell
+$ npm run migration:revert
+```
 
-## License
+It should be noted that each time this command is run, only the most recent database migration script will be revoked. If you need to revoke multiple times, you need to run the script continuously for the corresponding number of times.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Others
+
+### 1. Using an interactive environment
+
+REPL (Read Eval Print Loop) is an interactive environment that accepts single user inputs, executes them, and returns the results to the user. The REPL function allows you to directly check the dependency graph from the terminal and call methods on the provider (and controller):
+
+```shell
+$ npm run start:repl
+```

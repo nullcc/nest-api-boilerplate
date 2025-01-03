@@ -117,9 +117,9 @@ $ npm run migration:generate
 
 The generated database migration script will be placed in the `src/database/migrations/` directory.
 
-### 2. Revoke
+### 2. Revert
 
-If you want to undo the latest database migration script, you can run the following command:
+If you want to revert the latest database migration script, you can run the following command:
 
 ```shell
 $ npm run migration:revert

@@ -117,9 +117,9 @@ $ npm run migration:generate
 
 生成的数据库迁移脚本将被放置在 `src/database/migrations/` 目录下。
 
-### 2. 撤销
+### 2. 还原
 
-如果你想撤销最近一次的数据库迁移脚本，可以运行如下命令：
+如果你想还原最近一次的数据库迁移脚本，可以运行如下命令：
 
 ```shell
 $ npm run migration:revert

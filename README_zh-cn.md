@@ -10,7 +10,8 @@
       * Local strategy
       * LDAP strategy
       * JWT strategy
-  * Authorization (TBD)
+  * Authorization
+    * Basic RBAC (Role-based access control)
   * Health check
     * orm
     * memory

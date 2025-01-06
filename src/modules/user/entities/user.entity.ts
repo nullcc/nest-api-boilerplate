@@ -9,6 +9,8 @@ import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 
 import { BaseEntity } from '@libs/database/entity/base.entity';
+import { Role } from '../enums/role.enum';
+import { Status } from '../enums/status.enum';
 
 @Entity()
 export class User extends BaseEntity {
@@ -24,6 +26,20 @@ export class User extends BaseEntity {
   @Column()
   @Exclude()
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  role: Role;
+
+  @Column({
+    type: 'enum',
+    enum: Status,
+    default: Status.Enabled,
+  })
+  status: Status;
 
   @BeforeInsert()
   @BeforeUpdate()

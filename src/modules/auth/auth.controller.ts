@@ -18,6 +18,7 @@ import { User } from '@modules/user/entities/user.entity';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { LocalAuthGuard } from '@modules/auth/guards/local-auth.guard';
 import { JWTAuthGuard } from './guards/jwt-auth.guard';
+import { Public } from '@modules/auth/decorators/route.decorator';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -27,6 +28,7 @@ export class AuthController {
     private readonly logger: Logger,
   ) {}
 
+  @Public()
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(TokenInterceptor)
@@ -34,6 +36,7 @@ export class AuthController {
     return this.authService.register(signUp);
   }
 
+  @Public()
   @Post('/login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)

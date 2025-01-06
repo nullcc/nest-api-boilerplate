@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigModule } from '@nestjs/config';
 import { createMock } from 'ts-auto-mock';
 
 import { User } from '@modules/user/entities/user.entity';
@@ -16,6 +17,12 @@ describe('Auth Controller', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        await ConfigModule.forRoot({
+          envFilePath: `${process.env.APP_ENV || ''}.env`,
+          isGlobal: true,
+        }),
+      ],
       controllers: [AuthController],
       providers: [Logger],
     })

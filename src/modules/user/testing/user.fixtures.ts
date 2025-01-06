@@ -1,4 +1,6 @@
 import { User } from '@modules/user/entities/user.entity';
+import { Role } from '@modules/user/enums/role.enum';
+import { Status } from '@modules/user/enums/status.enum';
 
 export const users: Partial<User>[] = [
   {
@@ -6,6 +8,8 @@ export const users: Partial<User>[] = [
     name: 'John Doe',
     email: 'john@doe.me',
     password: '$2a$10$/fYiP2xeHZmTDRrT6VYOueMjqlYsypCpYp9hEztSnEXhhZgxnZ62G', // 12345678
+    role: Role.User,
+    status: Status.Enabled,
     createdAt: new Date('2024-12-30 00:00:00'),
     updatedAt: new Date('2024-12-30 00:00:00'),
   },
@@ -14,6 +18,8 @@ export const users: Partial<User>[] = [
     name: 'Jane Doe',
     email: 'jane@doe.me',
     password: '$2a$10$/fYiP2xeHZmTDRrT6VYOueMjqlYsypCpYp9hEztSnEXhhZgxnZ62G', // 12345678
+    role: Role.User,
+    status: Status.Enabled,
     createdAt: new Date('2024-12-30 00:00:00'),
     updatedAt: new Date('2024-12-30 00:00:00'),
   },

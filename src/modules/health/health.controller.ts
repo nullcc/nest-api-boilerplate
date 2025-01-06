@@ -9,6 +9,8 @@ import {
   HttpHealthIndicator,
 } from '@nestjs/terminus';
 
+import { Public } from '@modules/auth/decorators/route.decorator';
+
 @Controller('health')
 export class HealthController {
   constructor(
@@ -20,6 +22,7 @@ export class HealthController {
     private readonly logger: Logger,
   ) {}
 
+  @Public()
   @Get()
   @HealthCheck()
   check(): Promise<HealthCheckResult> {

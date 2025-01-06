@@ -12,6 +12,7 @@ This project aims to provide an API project boilerplate based on [nestjs](https:
       * JWT strategy
   * Authorization
     * Basic RBAC (Role-based access control)
+    * Claims-based authorization (TBD)
   * Health check
     * orm
     * memory

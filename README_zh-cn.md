@@ -12,6 +12,7 @@
       * JWT strategy
   * Authorization
     * Basic RBAC (Role-based access control)
+    * Claims-based authorization (TBD)
   * Health check
     * orm
     * memory

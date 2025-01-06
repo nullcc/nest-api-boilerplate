@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 
 import { loggerOptions } from '@config/logger.config';
@@ -39,6 +40,9 @@ import { AppController } from '@src/app.controller';
       rootPath: `${__dirname}/../public`,
       renderPath: '/',
     }),
+    // Task Scheduling
+    // https://docs.nestjs.com/techniques/task-scheduling
+    ScheduleModule.forRoot(),
     TerminusModule,
     HealthModule,
     AuthModule,

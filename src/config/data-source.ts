@@ -1,6 +1,9 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
 
+import { userFactory } from '@modules/user/testing/user.factory';
+import UserSeeder from '@modules/user/testing/user.seeder';
+
 export const dataSourceOptions: DataSourceOptions & SeederOptions = {
   type: 'postgres',
   host: process.env.DATABASE_HOST,
@@ -11,8 +14,10 @@ export const dataSourceOptions: DataSourceOptions & SeederOptions = {
   synchronize: false,
   entities: [__dirname + '/../**/entities/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
-  factories: [__dirname + '/../**/testing/*.factory{.ts,.js}'],
-  seeds: [__dirname + '/../**/testing/*.seeder{.ts,.js}'],
+  factories: [userFactory],
+  seeds: [UserSeeder],
+  // factories: [__dirname + '/../**/testing/*.factory{.ts,.js}'],
+  // seeds: [__dirname + '/../**/testing/*.seeder{.ts,.js}'],
   extra: {
     ssl:
       process.env.SSL_MODE === 'require'

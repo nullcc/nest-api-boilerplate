@@ -12,7 +12,7 @@ import { LdapStrategy } from './strategies/ldap.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { SessionSerializer } from './session.serializer';
 import { JWTAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
-import { RolesGuard } from '@modules/user/guards/roles.guard';
+import { RolesGuard } from '@modules/auth/guards/roles.guard';
 
 @Module({
   imports: [

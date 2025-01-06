@@ -1,7 +1,7 @@
 import { Controller, Delete, Logger, Param } from '@nestjs/common';
 
 import { UserService } from '@modules/user/services/user.service';
-import { Roles } from '@modules/user/decorators/roles.decorator';
+import { Roles } from '@modules/auth/decorators/roles.decorator';
 import { Role } from '@modules/user/enums/role.enum';
 
 @Controller('users')

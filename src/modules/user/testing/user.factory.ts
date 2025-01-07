@@ -1,8 +1,8 @@
 import { setSeederFactory } from 'typeorm-extension';
 
-import { User } from '../entities/user.entity';
-import { Role } from '../enums/role.enum';
-import { Status } from '../enums/status.enum';
+import { User } from '@modules/user/entities/user.entity';
+import { Role } from '@modules/user/enums/role.enum';
+import { Status } from '@modules/user/enums/status.enum';
 
 export const userFactory = setSeederFactory(User, (faker) => {
   const user = new User();

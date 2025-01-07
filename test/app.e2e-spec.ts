@@ -21,45 +21,12 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/health (GET)', async () => {
+  it('/ (GET)', async () => {
     await request
-      .get('/health')
+      .get('/')
       .expect(HttpStatus.OK)
       .expect((response) =>
-        expect(response.body).toMatchObject(
-          expect.objectContaining({
-            details: {
-              db: {
-                status: expect.stringMatching(/up/i),
-              },
-              mem_rss: {
-                status: expect.stringMatching(/up/i),
-              },
-              storage: {
-                status: expect.stringMatching(/up/i),
-              },
-              'nestjs-docs': {
-                status: expect.stringMatching(/up/i),
-              },
-            },
-            error: {},
-            info: {
-              db: {
-                status: expect.stringMatching(/up/i),
-              },
-              mem_rss: {
-                status: expect.stringMatching(/up/i),
-              },
-              storage: {
-                status: expect.stringMatching(/up/i),
-              },
-              'nestjs-docs': {
-                status: expect.stringMatching(/up/i),
-              },
-            },
-            status: 'ok',
-          }),
-        ),
+        expect(response.text).toContain('Hello, nest api boilerplate!'),
       );
   });
 });

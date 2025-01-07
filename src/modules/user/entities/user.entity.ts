@@ -9,8 +9,8 @@ import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 
 import { BaseEntity } from '@libs/database/entity/base.entity';
-import { Role } from '../enums/role.enum';
-import { Status } from '../enums/status.enum';
+import { Role } from '@modules/user/enums/role.enum';
+import { Status } from '@modules/user/enums/status.enum';
 
 @Entity()
 export class User extends BaseEntity {

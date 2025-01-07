@@ -25,7 +25,7 @@ export class HealthController {
   @Public()
   @Get()
   @HealthCheck()
-  check(): Promise<HealthCheckResult> {
+  async check(): Promise<HealthCheckResult> {
     return this.health.check([
       () => this.orm.pingCheck('db'),
       () => this.memory.checkRSS('mem_rss', 1024 * 2 ** 20 /* 1024 MB */),

@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 
-import { IS_PUBLIC_KEY } from '../decorators/route.decorator';
-import { jwtFromRequest } from '../strategies/jwt.strategy';
+import { IS_PUBLIC_KEY } from '@modules/auth/decorators/route.decorator';
+import { jwtFromRequest } from '@modules/auth/strategies/jwt.strategy';
 
 @Injectable()
 export class JWTAuthGuard extends AuthGuard('jwt') {

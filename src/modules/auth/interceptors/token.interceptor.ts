@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import type { User } from '@modules/user/entities/user.entity';
-import { AuthService } from '../auth.service';
+import { AuthService } from '@modules/auth/auth.service';
 
 @Injectable()
 export class TokenInterceptor implements NestInterceptor {

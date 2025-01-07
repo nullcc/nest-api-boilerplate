@@ -10,9 +10,9 @@ import {
   PaginateQuery,
 } from 'nestjs-paginate';
 
-import { User } from '../entities/user.entity';
-import { Status } from '../enums/status.enum';
-import { Role } from '../enums/role.enum';
+import { User } from '@modules/user/entities/user.entity';
+import { Status } from '@modules/user/enums/status.enum';
+import { Role } from '@modules/user/enums/role.enum';
 
 @Injectable()
 export class UserService {

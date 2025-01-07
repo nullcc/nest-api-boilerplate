@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt, JwtFromRequestFunction } from 'passport-jwt';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '@modules/auth/auth.service';
 import { User } from '@modules/user/entities/user.entity';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { JwtPayload } from '@modules/auth/interfaces/jwt-payload.interface';
 
 export const extractJwtFromCookie: JwtFromRequestFunction = (request) => {
   return request.signedCookies['token']!;

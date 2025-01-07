@@ -13,6 +13,7 @@
   * Authorization
     * Basic RBAC (Role-based access control)
     * Claims-based authorization (TBD)
+  * Pagination and filtering
   * Health check
     * orm
     * memory
@@ -83,6 +84,8 @@ $ npm run migration:run
 $ npm run seed:run
 ```
 
+数据种子一般放置在 `modules/*/testing/*.seeder.ts` 文件中。
+
 ## 编译并运行项目
 
 ```bash
@@ -143,6 +146,10 @@ $ npm run migration:revert
 ```
 
 需要注意的是，每运行一次该命令，只会还原最近一次的数据库迁移脚本，如果你需要还原多次，需要连续运行该脚本相应的次数。
+
+## 数据分页
+
+本模版中使用了 [nestjs-paginate](https://github.com/ppetzold/nestjs-paginate) 来支持数据分页。
 
 ## 其他
 

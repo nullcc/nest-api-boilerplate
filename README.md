@@ -13,6 +13,7 @@ This project aims to provide an API project boilerplate based on [nestjs](https:
   * Authorization
     * Basic RBAC (Role-based access control)
     * Claims-based authorization (TBD)
+  * Pagination and filtering
   * Health check
     * orm
     * memory
@@ -83,6 +84,8 @@ This step is optional. If some data seeds have already been defined in the proje
 $ npm run seed:run
 ```
 
+Data seeds are usually placed in the `modules/*/testing/*.seeder.ts` file.
+
 ## Compile and run the project
 
 ```bash
@@ -143,6 +146,10 @@ $ npm run migration:revert
 ```
 
 It should be noted that each time this command is run, only the most recent database migration script will be revoked. If you need to revoke multiple times, you need to run the script continuously for the corresponding number of times.
+
+## Data pagination
+
+This template uses [nestjs page](https://github.com/ppetzold/nestjs-paginate) to support data pagination.
 
 ## Others
 

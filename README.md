@@ -19,6 +19,7 @@ This project aims to provide an API project boilerplate based on [nestjs](https:
     * memory
     * disk
     * http
+  * Rate limiting
 * Task Scheduling
 * Testing
   * Unit testing framework

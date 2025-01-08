@@ -1,10 +1,12 @@
 import { Logger, Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { loggerOptions } from '@config/logger.config';
 import typeORMconfig from '@config/typeorm';
@@ -44,11 +46,36 @@ import { AppController } from '@src/app.controller';
     // https://docs.nestjs.com/techniques/task-scheduling
     ScheduleModule.forRoot(),
     TerminusModule,
+    // Rate Limiting
+    // https://docs.nestjs.com/security/rate-limiting
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 60000,
+        limit: 10,
+      },
+      {
+        name: 'medium',
+        ttl: 60000,
+        limit: 100,
+      },
+      {
+        name: 'long',
+        ttl: 60000,
+        limit: 1000,
+      },
+    ]),
     HealthModule,
     AuthModule,
     UserModule,
   ],
   controllers: [AppController],
-  providers: [Logger],
+  providers: [
+    Logger,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -10,6 +10,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { loggerOptions } from '@config/logger.config';
 import typeORMconfig from '@config/typeorm';
+import { getThrottlerOptions } from '@config/throttler';
 import { HealthModule } from '@modules/health/health.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UserModule } from '@modules/user/user.module';
@@ -48,23 +49,7 @@ import { AppController } from '@src/app.controller';
     TerminusModule,
     // Rate Limiting
     // https://docs.nestjs.com/security/rate-limiting
-    ThrottlerModule.forRoot([
-      {
-        name: 'short',
-        ttl: 60000,
-        limit: 10,
-      },
-      {
-        name: 'medium',
-        ttl: 60000,
-        limit: 100,
-      },
-      {
-        name: 'long',
-        ttl: 60000,
-        limit: 1000,
-      },
-    ]),
+    ThrottlerModule.forRoot(getThrottlerOptions()),
     HealthModule,
     AuthModule,
     UserModule,

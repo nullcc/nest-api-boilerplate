@@ -1,5 +1,6 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import supertest from 'supertest';
+import * as _ from 'lodash';
 
 import { bootstrapApp, initializeIntegreSQL } from './tests-hooks';
 
@@ -61,5 +62,25 @@ describe('HealthController (e2e)', () => {
           }),
         ),
       );
+  });
+
+  it('should get "ThrottlerException"', async () => {
+    for (const i of _.range(1, 12)) {
+      if (i <= 10) {
+        await request.get('/health').expect(HttpStatus.OK);
+      } else {
+        if (i === 11) {
+          await request
+            .get('/health')
+            .expect(HttpStatus.TOO_MANY_REQUESTS)
+            .expect((response) =>
+              expect(response.body).toEqual({
+                message: 'ThrottlerException: Too Many Requests',
+                statusCode: 429,
+              }),
+            );
+        }
+      }
+    }
   });
 });

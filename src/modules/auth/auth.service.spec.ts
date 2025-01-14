@@ -108,6 +108,7 @@ describe('AuthService', () => {
       sub: '',
       iat: 0,
       exp: 0,
+      id: 1,
       email: 'john@doe.me',
       name: 'john',
     };
@@ -125,6 +126,7 @@ describe('AuthService', () => {
       sub: '',
       iat: 0,
       exp: 0,
+      id: 1,
       email: 'notregistered@example.com',
       name: 'notregistered',
     };

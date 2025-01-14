@@ -12,6 +12,7 @@ export interface JwtPayload {
   jti?: string; // JWT ID
 
   // custom fields
+  id: number;
   email: string;
   name: string;
 }

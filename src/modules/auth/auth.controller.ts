@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { SignUp } from '@modules/auth/dtos/sign-up.dto';
@@ -20,6 +21,7 @@ import { LocalAuthGuard } from '@modules/auth/guards/local-auth.guard';
 import { JWTAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from '@modules/auth/decorators/route.decorator';
 
+@ApiTags('Auth')
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {

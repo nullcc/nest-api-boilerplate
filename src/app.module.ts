@@ -1,5 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
@@ -13,6 +13,7 @@ import typeORMconfig from '@config/typeorm';
 import { getThrottlerOptions } from '@config/throttler';
 import { HealthModule } from '@modules/health/health.module';
 import { AuthModule } from '@modules/auth/auth.module';
+import { AuditLogModule } from '@modules/audit-log/audit-log.module';
 import { UserModule } from '@modules/user/user.module';
 import { AppController } from '@src/app.controller';
 
@@ -52,6 +53,7 @@ import { AppController } from '@src/app.controller';
     ThrottlerModule.forRoot(getThrottlerOptions()),
     HealthModule,
     AuthModule,
+    AuditLogModule,
     UserModule,
   ],
   controllers: [AppController],

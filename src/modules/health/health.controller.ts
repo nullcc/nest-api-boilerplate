@@ -8,9 +8,11 @@ import {
   DiskHealthIndicator,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
+import { ApiTags } from '@nestjs/swagger';
 
 import { Public } from '@modules/auth/decorators/route.decorator';
 
+@ApiTags('Health')
 @Controller('health')
 export class HealthController {
   constructor(

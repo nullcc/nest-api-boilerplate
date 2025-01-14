@@ -82,7 +82,7 @@ export class UserService {
     const user = await this.userRepository.findOne(where);
     if (!user) {
       throw new NotFoundException(
-        `There isn't any user with identifier: ${where}`,
+        `There isn't any user with identifier: ${JSON.stringify(where.where)}`,
       );
     }
     return user;

@@ -50,6 +50,7 @@ export class AuthService {
 
   signToken(user: User): string {
     const payload = {
+      id: user.id,
       email: user.email,
       name: user.name,
       roles: [user.role],

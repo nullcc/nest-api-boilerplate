@@ -1,20 +1,21 @@
 import Strategy from 'passport-ldapauth';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
-  constructor() {
+  constructor(private config: ConfigService) {
     super(
       {
         passReqToCallback: true,
         server: {
-          url: process.env.LDAP_URL,
-          bindDN: process.env.LDAP_BIND_DN,
-          bindCredentials: process.env.LDAP_BIND_CREDENTIALS,
-          searchBase: process.env.LDAP_SEARCH_BASE,
-          searchFilter: process.env.LDAP_SEARCH_FILTER,
+          url: config.get<string>('LDAP_URL'),
+          bindDN: config.get<string>('LDAP_BIND_DN'),
+          bindCredentials: config.get<string>('LDAP_BIND_CREDENTIALS'),
+          searchBase: config.get<string>('LDAP_SEARCH_BASE'),
+          searchFilter: config.get<string>('LDAP_SEARCH_FILTER'),
         },
         usernameField: 'email',
       },

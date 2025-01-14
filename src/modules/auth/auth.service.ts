@@ -16,7 +16,6 @@ export class AuthService {
 
   async register(signUp: SignUp): Promise<User> {
     const user = await this.userService.create(signUp);
-    delete user.password;
     return user;
   }
 

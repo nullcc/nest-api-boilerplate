@@ -6,6 +6,7 @@ import { Status } from '@modules/user/enums/status.enum';
 
 export class UpdateUserDto {
   @IsDefined()
+  @IsNotEmpty()
   readonly name: string;
 
   @IsDefined()

@@ -59,9 +59,7 @@ export class UserService {
   }
 
   async findUser(id: number): Promise<User> {
-    const user = await this.findOne({ where: { id } });
-    delete user.password;
-    return user;
+    return await this.findOne({ where: { id } });
   }
 
   async updateUser(id: number, data: Partial<User>): Promise<User> {
@@ -70,7 +68,6 @@ export class UserService {
     user.role = data.role;
     user.status = data.status;
     await this.userRepository.save(user);
-    delete user.password;
     return user;
   }
 
@@ -78,7 +75,6 @@ export class UserService {
     const user = await this.findOne({ where: { id } });
     user.status = Status.Disabled;
     await this.userRepository.save(user);
-    delete user.password;
     return user;
   }
 

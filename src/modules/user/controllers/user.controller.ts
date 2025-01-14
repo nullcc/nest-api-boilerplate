@@ -1,11 +1,13 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Logger,
   Param,
   Patch,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
@@ -16,6 +18,7 @@ import { Role } from '@modules/user/enums/role.enum';
 import { UpdateUserDto } from '@modules/user/dtos/update-user.dto';
 
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(
     private readonly userService: UserService,

@@ -39,7 +39,7 @@ describe('HealthController (e2e)', () => {
               storage: {
                 status: expect.stringMatching(/up/i),
               },
-              'nestjs-docs': {
+              'nodejs-api': {
                 status: expect.stringMatching(/up/i),
               },
             },
@@ -54,7 +54,7 @@ describe('HealthController (e2e)', () => {
               storage: {
                 status: expect.stringMatching(/up/i),
               },
-              'nestjs-docs': {
+              'nodejs-api': {
                 status: expect.stringMatching(/up/i),
               },
             },

@@ -32,7 +32,7 @@ export class HealthController {
       () => this.orm.pingCheck('db'),
       () => this.memory.checkRSS('mem_rss', 1024 * 2 ** 20 /* 1024 MB */),
       () => this.disk.checkStorage('storage', { path: '/', thresholdPercent: 0.5 }),
-      () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
+      () => this.http.pingCheck('nodejs-api', 'https://nodejs.org/api'),
     ]);
   }
 }

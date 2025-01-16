@@ -111,6 +111,7 @@ describe('AuthService', () => {
       id: 1,
       email: 'john@doe.me',
       name: 'john',
+      roles: ['user'],
     };
 
     mockedUserService.findOne.mockResolvedValueOnce(
@@ -129,6 +130,7 @@ describe('AuthService', () => {
       id: 1,
       email: 'notregistered@example.com',
       name: 'notregistered',
+      roles: ['user'],
     };
 
     mockedUserService.findOne.mockRejectedValueOnce('NotFound');

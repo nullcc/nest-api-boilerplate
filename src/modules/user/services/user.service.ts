@@ -1,18 +1,12 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOneOptions } from 'typeorm';
-import {
-  FilterOperator,
-  FilterSuffix,
-  paginate,
-  PaginateConfig,
-  Paginated,
-  PaginateQuery,
-} from 'nestjs-paginate';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 import { User } from '@modules/user/entities/user.entity';
 import { Status } from '@modules/user/enums/status.enum';
 import { Role } from '@modules/user/enums/role.enum';
+import { USER_PAGINATION_CONFIG } from '@modules/user/pagination.config';
 
 @Injectable()
 export class UserService {
@@ -22,31 +16,6 @@ export class UserService {
     private readonly logger: Logger,
   ) {}
 
-  // see https://github.com/ppetzold/nestjs-paginate
-  private readonly paginationConfig: PaginateConfig<User> = {
-    sortableColumns: ['id', 'name', 'email'],
-    nullSort: 'last',
-    defaultSortBy: [['id', 'DESC']],
-    searchableColumns: ['name', 'email', 'role', 'status'],
-    select: ['id', 'name', 'email', 'role', 'status'],
-    filterableColumns: {
-      name: [
-        FilterOperator.EQ,
-        FilterOperator.IN,
-        FilterOperator.ILIKE,
-        FilterSuffix.NOT,
-      ],
-      email: [
-        FilterOperator.EQ,
-        FilterOperator.IN,
-        FilterOperator.ILIKE,
-        FilterSuffix.NOT,
-      ],
-      role: [FilterOperator.EQ, FilterOperator.IN, FilterSuffix.NOT],
-      status: [FilterOperator.EQ, FilterOperator.IN, FilterSuffix.NOT],
-    },
-  };
-
   async create(data: Partial<User>): Promise<User> {
     data.role = Role.User;
     data.status = Status.Enabled;
@@ -55,7 +24,7 @@ export class UserService {
   }
 
   public findAll(query: PaginateQuery): Promise<Paginated<User>> {
-    return paginate(query, this.userRepository, this.paginationConfig);
+    return paginate(query, this.userRepository, USER_PAGINATION_CONFIG);
   }
 
   async findUser(id: number): Promise<User> {

@@ -1,5 +1,5 @@
 /**
- * See https://en.wikipedia.org/wiki/JSON_Web_Token
+ * https://en.wikipedia.org/wiki/JSON_Web_Token
  */
 export interface JwtPayload {
   // standard fields
@@ -15,4 +15,5 @@ export interface JwtPayload {
   id: number;
   email: string;
   name: string;
+  roles: string[];
 }

@@ -1,15 +1,10 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOneOptions } from 'typeorm';
-import {
-  FilterOperator,
-  paginate,
-  PaginateConfig,
-  Paginated,
-  PaginateQuery,
-} from 'nestjs-paginate';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 import { AuditLog } from '@modules/audit-log/entities/audit-log.entity';
+import { AUDIT_LOG_PAGINATION_CONFIG } from '@modules/audit-log/pagination.config';
 
 @Injectable()
 export class AuditLogService {
@@ -19,22 +14,8 @@ export class AuditLogService {
     private readonly logger: Logger,
   ) {}
 
-  // see https://github.com/ppetzold/nestjs-paginate
-  private readonly paginationConfig: PaginateConfig<AuditLog> = {
-    sortableColumns: ['id', 'userId'],
-    nullSort: 'last',
-    defaultSortBy: [['id', 'DESC']],
-    searchableColumns: ['userId', 'ip', 'description'],
-    select: ['id', 'userId', 'ip', 'description', 'parameters'],
-    filterableColumns: {
-      userId: [FilterOperator.EQ],
-      ip: [FilterOperator.EQ],
-      description: [FilterOperator.ILIKE],
-    },
-  };
-
   public findAll(query: PaginateQuery): Promise<Paginated<AuditLog>> {
-    return paginate(query, this.auditLogRepository, this.paginationConfig);
+    return paginate(query, this.auditLogRepository, AUDIT_LOG_PAGINATION_CONFIG);
   }
 
   async findAuditLog(id: number): Promise<AuditLog> {

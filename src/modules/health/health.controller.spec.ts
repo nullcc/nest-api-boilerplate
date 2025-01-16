@@ -86,7 +86,7 @@ describe('HealthController', () => {
           },
         },
         {
-          "nestjs-docs": {
+          "nodejs-api": {
             "status": "up",
           },
         },

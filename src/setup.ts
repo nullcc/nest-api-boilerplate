@@ -14,6 +14,7 @@ const setupLogger = (app: NestExpressApplication) => {
 };
 
 const setupApiDoc = (app: NestExpressApplication) => {
+  // https://docs.nestjs.com/openapi/introduction
   const config = new DocumentBuilder()
     .setTitle('Nest API Boilerplate')
     .setDescription('Nest API Boilerplate API Description')
@@ -35,6 +36,7 @@ const setupApiDoc = (app: NestExpressApplication) => {
 
 const setupGlobalPipes = (app: NestExpressApplication) => {
   app.useGlobalPipes(
+    // https://docs.nestjs.com/techniques/validation
     new ValidationPipe({
       transform: true,
       whitelist: true,
@@ -44,6 +46,7 @@ const setupGlobalPipes = (app: NestExpressApplication) => {
 };
 
 const setupViewEngine = (app: NestExpressApplication) => {
+  // https://docs.nestjs.com/techniques/mvc
   app.useStaticAssets(join(__dirname, '../public', 'assets'));
   app.setBaseViewsDir(join(__dirname, '../public', 'views'));
   app.setViewEngine('ejs');

@@ -23,6 +23,7 @@ export class User extends BaseEntity {
   @Column()
   name: string;
 
+  // https://docs.nestjs.com/techniques/serialization
   @Column()
   @Exclude()
   password: string;

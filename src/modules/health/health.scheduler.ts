@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
+// https://docs.nestjs.com/techniques/task-scheduling
+
 @Injectable()
 export class HealthScheduler {
   constructor(private readonly logger: Logger) {}

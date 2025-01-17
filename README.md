@@ -37,7 +37,9 @@ $ npm install
 
 There are three environment variable files pre-set in this project template, and their priority is as follows:
 
+```markdown
 .env.local > .env.development > .env
+```
 
 If you want to modify the default environment variable priority or define a new environment variable priority, you can modify the `src/config/env.ts` file. To create an environment variable file, you can copy it from the `.env.example` file:
 

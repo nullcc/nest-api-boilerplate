@@ -37,7 +37,9 @@ $ npm install
 
 本项目模版中预置了三个环境变量文件，它们的优先级如下：
 
+```markdown
 .env.local > .env.development > .env
+```
 
 如果你希望修改默认的环境变量优先级，或者定义新的环境变量优先级，可以修改 `src/config/env.ts` 文件。 要创建环境变量文件，可以从 `.env.example`文件复制得来：
 

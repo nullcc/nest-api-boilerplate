@@ -1,5 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
@@ -8,7 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
-import { loggerOptions } from '@config/logger.config';
+import { getLoggerOptions } from '@config/logger.config';
 import typeORMconfig from '@config/typeorm';
 import { getThrottlerOptions } from '@config/throttler';
 import { HealthModule } from '@modules/health/health.module';
@@ -22,12 +22,15 @@ import { AppController } from '@src/app.controller';
     // Configuration
     // https://docs.nestjs.com/techniques/configuration
     ConfigModule.forRoot({
-      envFilePath: `${process.env.APP_ENV || ''}.env`,
+      envFilePath: `.env${process.env.APP_ENV ? '.' + process.env.APP_ENV : ''}`,
       isGlobal: true,
     }),
     // https://getpino.io
     // https://github.com/iamolegga/nestjs-pino
-    LoggerModule.forRoot(loggerOptions),
+    LoggerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => getLoggerOptions(config),
+    }),
     // Database
     // https://docs.nestjs.com/techniques/database
     TypeOrmModule.forRootAsync({

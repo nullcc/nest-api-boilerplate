@@ -11,7 +11,7 @@ export class AppController {
   @SkipThrottle({ short: true, medium: true }) // this route will skip "short" and "medium" rate limiting.
   @Get('')
   @Render('index')
-  page() {
+  index() {
     return { name: 'nest api boilerplate' };
   }
 }

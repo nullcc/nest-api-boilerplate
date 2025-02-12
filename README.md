@@ -35,13 +35,9 @@ $ npm install
 
 ### 2. Environment variable configuration
 
-There are three environment variable files pre-set in this project template, and their priority is as follows:
+App will load `.env.${APP_ENV}` file in project root as environment variable file when starting up. If `APP_ENV` is not be set, app will load `.env` file in project root as environment variable file. For example, if APP_ENV=production, app will load `.env.production` as environment variable file.
 
-```markdown
-.env.local > .env.development > .env
-```
-
-If you want to modify the default environment variable priority or define a new environment variable priority, you can modify the `src/config/env.ts` file. To create an environment variable file, you can copy it from the `.env.example` file:
+To create an environment variable file, you can copy it from the `.env.example` file:
 
 ```shell
 $ cp .env.example .env

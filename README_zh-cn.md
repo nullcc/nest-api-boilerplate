@@ -35,13 +35,9 @@ $ npm install
 
 ### 2. 环境变量配置
 
-本项目模版中预置了三个环境变量文件，它们的优先级如下：
+项目在启动时将加载项目根目录下的 `.env.${APP_ENV}` 文件作为环境变量文件，`APP_ENV` 是环境变量。如果未设置 `APP_ENV`，将默认加载项目根目录下的 `.env` 文件作为环境变量文件。例如，当 APP_ENV=production 时，项目将加载 `.env.production` 环境变量文件。
 
-```markdown
-.env.local > .env.development > .env
-```
-
-如果你希望修改默认的环境变量优先级，或者定义新的环境变量优先级，可以修改 `src/config/env.ts` 文件。 要创建环境变量文件，可以从 `.env.example`文件复制得来：
+要创建环境变量文件，可以从 `.env.example`文件复制得来：
 
 ```shell
 $ cp .env.example .env

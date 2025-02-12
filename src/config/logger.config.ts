@@ -12,7 +12,10 @@ import { ConfigService } from '@nestjs/config';
 
 const passUrl = new Set(['/health', '/graphql']);
 
-export const getLoggerOptions = (config: ConfigService): Params => {
+const getStreams = (config: ConfigService) => {
+  // https://getpino.io/#/docs/help?id=log-to-different-streams
+  // level: "fatal" | "error" | "warn" | "info" | "debug" | "trace";
+  const streams = [];
   const consoleStream = pretty({
     sync: true,
     colorize: true,
@@ -22,18 +25,21 @@ export const getLoggerOptions = (config: ConfigService): Params => {
     destination: config.get<string>('LOG_FILE') || 1, // 1 is stdout
     mkdir: true,
   });
-  const elasticStream = pinoElastic({
-    index: config.get<string>('ELASTICSEARCH_INDEX_PATTERN'),
-    node: config.get<string>('ELASTICSEARCH'),
-    esVersion: 7,
-    flushBytes: 1000,
-  } as PinoElasticsearchOptions);
-  // https://getpino.io/#/docs/help?id=log-to-different-streams
-  // level: "fatal" | "error" | "warn" | "info" | "debug" | "trace";
-  const streams = [
-    { level: 'info', stream: consoleStream },
-    { level: 'info', stream: elasticStream },
-  ];
+  streams.push({ level: 'info', stream: consoleStream });
+  if (config.get<string>('APP_ENV') === 'production') {
+    const elasticStream = pinoElastic({
+      index: config.get<string>('ELASTICSEARCH_INDEX_PATTERN'),
+      node: config.get<string>('ELASTICSEARCH'),
+      esVersion: 7,
+      flushBytes: 1000,
+    } as PinoElasticsearchOptions);
+    streams.push({ level: 'info', stream: elasticStream });
+  }
+  return streams;
+};
+
+export const getLoggerOptions = (config: ConfigService): Params => {
+  const streams = getStreams(config);
   const opts = {
     dedupe: true,
   };

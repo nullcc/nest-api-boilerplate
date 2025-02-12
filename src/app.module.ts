@@ -8,7 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
-import { getLoggerOptions } from '@config/logger.config';
+import { getLoggerOptions } from '@config/logger';
 import typeORMconfig from '@config/typeorm';
 import { getThrottlerOptions } from '@config/throttler';
 import { HealthModule } from '@modules/health/health.module';

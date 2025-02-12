@@ -16,17 +16,50 @@ const getStreams = (config: ConfigService) => {
   // https://getpino.io/#/docs/help?id=log-to-different-streams
   // level: "fatal" | "error" | "warn" | "info" | "debug" | "trace";
   const streams = [];
-  const consoleStream = pretty({
+
+  const stdoutStream = pretty({
     sync: true,
     colorize: true,
     hideObject: true,
     translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
-    // ignore: 'pid,hostname',
-    destination: config.get<string>('LOG_FILE') || 1, // 1 is stdout
+    destination: 1,
+  });
+  streams.push({ level: 'info', stream: stdoutStream });
+
+  const stderrStream = pretty({
+    sync: true,
+    colorize: true,
+    hideObject: true,
+    translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
+    destination: 2,
+  });
+  streams.push({ level: 'error', stream: stderrStream });
+
+  const logFileStream = pretty({
+    sync: true,
+    colorize: false,
+    hideObject: true,
+    translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
+    destination: config.get<string>('LOG_FILE', 'logs/app.stdout.log'),
     mkdir: true,
   });
-  streams.push({ level: 'info', stream: consoleStream });
-  if (config.get<string>('APP_ENV') === 'production') {
+  streams.push({ level: 'info', stream: logFileStream });
+
+  const errLogFileStream = pretty({
+    sync: true,
+    colorize: false,
+    hideObject: true,
+    translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
+    destination: config.get<string>('ERR_LOG_FILE', 'logs/app.stderr.log'),
+    mkdir: true,
+  });
+  streams.push({ level: 'error', stream: errLogFileStream });
+
+  if (
+    config.get<string>('APP_ENV') === 'production' ||
+    config.get<string>('ELASTICSEARCH_INDEX_PATTERN') ||
+    config.get<string>('ELASTICSEARCH')
+  ) {
     const elasticStream = pinoElastic({
       index: config.get<string>('ELASTICSEARCH_INDEX_PATTERN'),
       node: config.get<string>('ELASTICSEARCH'),

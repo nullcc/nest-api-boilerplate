@@ -5,18 +5,29 @@ import { Role } from '@modules/user/enums/role.enum';
 import { Status } from '@modules/user/enums/status.enum';
 
 export class UpdateUserDto {
+  @ApiProperty({
+    required: true,
+    description: 'User name',
+  })
   @IsDefined()
   @IsNotEmpty()
   readonly name: string;
 
+  @ApiProperty({
+    required: true,
+    enum: Role,
+    description: 'User role',
+  })
   @IsDefined()
   @IsNotEmpty()
   @IsEnum(Role)
-  @ApiProperty({
-    enum: Role,
-  })
   readonly role: Role;
 
+  @ApiProperty({
+    required: true,
+    enum: Status,
+    description: 'User status',
+  })
   @IsDefined()
   @IsNotEmpty()
   @IsEnum(Status)

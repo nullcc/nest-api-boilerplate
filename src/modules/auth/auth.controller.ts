@@ -14,6 +14,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { SignUp } from '@modules/auth/dtos/sign-up.dto';
+import { SignIn } from '@modules/auth/dtos/sign-in.dto';
 import { AuthUser } from '@modules/user/decorators/user.decorator';
 import { User } from '@modules/user/entities/user.entity';
 import { TokenInterceptor } from './interceptors/token.interceptor';
@@ -43,7 +44,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(TokenInterceptor)
-  async login(@AuthUser() user: User): Promise<User> {
+  async login(@AuthUser() user: User, @Body() signIn?: SignIn): Promise<User> {
     return user;
   }
 

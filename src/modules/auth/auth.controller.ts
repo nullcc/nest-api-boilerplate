@@ -21,6 +21,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { LocalAuthGuard } from '@modules/auth/guards/local-auth.guard';
 import { JWTAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from '@modules/auth/decorators/route.decorator';
+import { AuditLog } from '@modules/audit-log/decorators/audit-log.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -44,6 +45,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(TokenInterceptor)
+  @AuditLog('Log in user')
   async login(@AuthUser() user: User, @Body() signIn?: SignIn): Promise<User> {
     return user;
   }

@@ -55,6 +55,7 @@ export class UserController {
   @ApiResponse({ status: HttpStatus.OK, type: UserResponseDto })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Not Found' })
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: 'Unprocessable Entity' })
+  @AuditLog('Update user')
   public update(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,

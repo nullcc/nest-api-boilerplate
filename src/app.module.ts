@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { RedisModule, RedisModuleOptions } from '@liaoliaots/nestjs-redis';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -25,6 +26,7 @@ import { AppController } from '@src/app.controller';
       envFilePath: `.env${process.env.APP_ENV ? '.' + process.env.APP_ENV : ''}`,
       isGlobal: true,
     }),
+    // Logger
     // https://getpino.io
     // https://github.com/iamolegga/nestjs-pino
     LoggerModule.forRootAsync({
@@ -40,6 +42,23 @@ import { AppController } from '@src/app.controller';
         ...config.get<TypeOrmModuleOptions>('typeorm'),
       }),
     }),
+    // Redis
+    // https://github.com/liaoliaots/nestjs-redis
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (
+        config: ConfigService,
+      ): Promise<RedisModuleOptions> => {
+        return {
+          config: {
+            host: config.get<string>('REDIS_HOST'),
+            port: config.get<number>('REDIS_PORT'),
+            password: config.get<string>('REDIS_PASSWORD'),
+          },
+        };
+      },
+    }),
     // Static Folder
     // https://docs.nestjs.com/recipes/serve-static
     // https://docs.nestjs.com/techniques/mvc
@@ -50,6 +69,8 @@ import { AppController } from '@src/app.controller';
     // Task Scheduling
     // https://docs.nestjs.com/techniques/task-scheduling
     ScheduleModule.forRoot(),
+    // Healthchecks
+    // https://docs.nestjs.com/recipes/terminus
     TerminusModule,
     // Rate Limiting
     // https://docs.nestjs.com/security/rate-limiting

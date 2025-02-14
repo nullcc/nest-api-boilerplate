@@ -1,34 +1,23 @@
-FROM node:18-bullseye-slim AS build
+# Use the official Node.js image as the base image
+FROM node:18
 
-WORKDIR /var/cache/backend
+# Set the working directory inside the container
+WORKDIR /usr/src/app
 
-RUN chown node:node /var/cache/backend
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-USER node
+# Install the application dependencies
+RUN npm install
 
-COPY --chown=node:node package*.json ./
+# Copy the rest of the application files
+COPY . .
 
-RUN npm ci
-
-COPY --chown=node:node . .
-
+# Build the NestJS application
 RUN npm run build
 
-FROM build AS dependencies
+# Expose the application port
+EXPOSE 3000
 
-RUN npm prune --omit=dev
-
-FROM gcr.io/distroless/nodejs:18 AS app
-
-ARG NODE_ENV="production" PORT=3000
-
-ENV NODE_ENV=${NODE_ENV} PORT=${PORT}
-
-WORKDIR /srv/app
-
-COPY --from=dependencies /var/cache/backend/node_modules ./node_modules
-COPY --from=build /var/cache/backend/dist ./
-
-EXPOSE ${PORT}
-
-CMD ["/srv/app/main.js"]
+# Command to run the application
+CMD ["node", "dist/main"]

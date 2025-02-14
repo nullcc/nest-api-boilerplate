@@ -88,7 +88,6 @@ export const getLoggerOptions = (config: ConfigService): Params => {
         autoLogging: {
           ignore: (req) => passUrl.has((<Request>req).originalUrl),
         },
-        customProps: (req) => (<Request>req).customProps,
       },
       multistream(streams, opts),
     ],

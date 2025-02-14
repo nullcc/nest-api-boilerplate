@@ -38,6 +38,9 @@ export class AuditLoggerInterceptor implements NestInterceptor {
           }
           const request = context.switchToHttp().getRequest();
           const userId = request['user'].id;
+          if (!userId) {
+            return;
+          }
           const ip = getClientIp(request);
           const data: QueryDeepPartialEntity<AuditLog> = {
             userId,

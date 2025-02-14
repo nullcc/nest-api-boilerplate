@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { LoggerModule } from 'nestjs-pino';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { CacheModule } from '@nestjs/cache-manager';
 import { RedisModule, RedisModuleOptions } from '@liaoliaots/nestjs-redis';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
@@ -41,6 +42,16 @@ import { AppController } from '@src/app.controller';
       useFactory: (config: ConfigService) => ({
         ...config.get<TypeOrmModuleOptions>('typeorm'),
       }),
+    }),
+    // Caching
+    // https://docs.nestjs.com/techniques/caching
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.get<string>('CACHE_TTL') ? parseInt(config.get<string>('CACHE_TTL')) : 60000,
+      }),
+      isGlobal: true,
     }),
     // Redis
     // https://github.com/liaoliaots/nestjs-redis

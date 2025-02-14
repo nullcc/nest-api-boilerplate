@@ -20,6 +20,7 @@
     * disk
     * http
   * Rate limiting
+  * Caching
 * Task Scheduling
 * Testing
   * Unit testing framework

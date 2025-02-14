@@ -50,7 +50,6 @@ export async function bootstrapApp(hash: string): Promise<NestExpressApplication
       async factory() {
         const { database, password, port, username } =
           await client.getTestDatabase(hash);
-
         return {
           type: 'postgres',
           autoLoadEntities: true,

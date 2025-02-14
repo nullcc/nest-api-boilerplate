@@ -56,7 +56,7 @@ In order to quickly start working in the development environment, here are some 
 Run the following command to start all the basic services mentioned above:
 
 ```shell
-$ docker-compose -f docker-compose-dev-infra.yml --env-file .env up
+$ docker compose -f docker-compose-dev-infra.yml --env-file .env up
 ```
 
 ### 4. Initialize the development environment database

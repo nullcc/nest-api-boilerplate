@@ -56,7 +56,7 @@ $ cp .env.example .env
 运行以下命令启动上述所有基础服务：
 
 ```shell
-$ docker-compose -f docker-compose-dev-infra.yml --env-file .env up
+$ docker compose -f docker-compose-dev-infra.yml --env-file .env up
 ```
 
 ### 4. 初始化开发环境数据库

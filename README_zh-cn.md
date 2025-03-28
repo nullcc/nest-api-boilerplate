@@ -1,5 +1,7 @@
 # Nest API Boilerplate
 
+[English](./README.md) | [简体中文](./README_zh-cn.md)
+
 本项目旨在提供一个以 [nestjs](https://nestjs.com/) 为基础的 API 工程模版，它已经包含或即将包含如下基本功能：
 
 * Database

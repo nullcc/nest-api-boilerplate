@@ -32,6 +32,24 @@ describe('validateEnv', () => {
     ).toThrow('Environment variable DATABASE_PORT must be a valid TCP port');
   });
 
+  it('should reject invalid boolean values', () => {
+    expect(() =>
+      validateEnv({
+        ...validConfig,
+        DATABASE_LOGGING: 'maybe',
+      }),
+    ).toThrow('Environment variable DATABASE_LOGGING must be a boolean');
+  });
+
+  it('should reject partial redis configuration', () => {
+    expect(() =>
+      validateEnv({
+        ...validConfig,
+        REDIS_PASSWORD: 'secret',
+      }),
+    ).toThrow('REDIS_HOST is required when Redis port or password is set');
+  });
+
   it('should reject weak production secrets', () => {
     expect(() =>
       validateEnv({
@@ -50,5 +68,16 @@ describe('validateEnv', () => {
         APP_SECRET: 'a-production-secret-with-enough-entropy',
       }),
     ).toThrow('Missing required environment variable: ALLOWED_ORIGINS');
+  });
+
+  it('should require a CA path for verifying database SSL modes', () => {
+    expect(() =>
+      validateEnv({
+        ...validConfig,
+        DATABASE_SSL_MODE: 'verify-full',
+      }),
+    ).toThrow(
+      'DATABASE_SSL_CA is required when DATABASE_SSL_MODE verifies certificates',
+    );
   });
 });

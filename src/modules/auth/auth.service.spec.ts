@@ -177,11 +177,24 @@ describe('AuthService', () => {
   });
 
   it('should sign a new JWT', () => {
-    const user = createMock<User>({ email: 'john@doe.me' });
+    const user = createMock<User>({
+      id: 1,
+      email: 'john@doe.me',
+      name: 'John Doe',
+    });
 
     mockedJwtService.sign.mockReturnValueOnce('j.w.t');
     const token = service.signToken(user);
 
     expect(token).toEqual(expect.any(String));
+    expect(mockedJwtService.sign).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sub: '1',
+        id: 1,
+        email: 'john@doe.me',
+        name: 'John Doe',
+        jti: expect.any(String),
+      }),
+    );
   });
 });

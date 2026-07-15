@@ -76,7 +76,9 @@ describe('JWTAuthGuard', () => {
       id: 1,
       email: 'disabled@example.com',
     });
-    authService.verifyPayload.mockRejectedValueOnce(new UnauthorizedException());
+    authService.verifyPayload.mockRejectedValueOnce(
+      new UnauthorizedException(),
+    );
 
     await expect(guard.canActivate(createContext(request))).rejects.toThrow(
       UnauthorizedException,

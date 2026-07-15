@@ -15,7 +15,11 @@ export class AuditLogService {
   ) {}
 
   public findAll(query: PaginateQuery): Promise<Paginated<AuditLog>> {
-    return paginate(query, this.auditLogRepository, AUDIT_LOG_PAGINATION_CONFIG);
+    return paginate(
+      query,
+      this.auditLogRepository,
+      AUDIT_LOG_PAGINATION_CONFIG,
+    );
   }
 
   async findAuditLog(id: number): Promise<AuditLog> {

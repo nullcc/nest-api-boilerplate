@@ -4,6 +4,11 @@
 !package.json
 !package-lock.json
 !README.md
+!public/
+!public/**
 !src/
+!src/**
 !tsconfig.build.json
 !tsconfig.json
+!typings/
+!typings/**

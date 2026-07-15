@@ -7,16 +7,25 @@ services:
     ports:
       - ${PORT}:${PORT}
     environment:
+      - NODE_ENV=production
       - APP_ENV=${APP_ENV}
       - PORT=${PORT}
       - APP_SECRET=${APP_SECRET}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - API_DOCS_ENABLED=${API_DOCS_ENABLED}
+      - JWT_ACCESS_TOKEN_EXPIRES_IN=${JWT_ACCESS_TOKEN_EXPIRES_IN}
       # Database
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_PORT=${DATABASE_PORT}
       - DATABASE_USER=${DATABASE_USER}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_LOGGING=${DATABASE_LOGGING}
+      - DATABASE_POOL_MAX=${DATABASE_POOL_MAX}
+      - DATABASE_POOL_IDLE_TIMEOUT_MS=${DATABASE_POOL_IDLE_TIMEOUT_MS}
+      - DATABASE_POOL_CONNECTION_TIMEOUT_MS=${DATABASE_POOL_CONNECTION_TIMEOUT_MS}
+      - DATABASE_SSL_MODE=${DATABASE_SSL_MODE}
+      - DATABASE_SSL_CA=${DATABASE_SSL_CA}
       # Redis
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
@@ -34,6 +43,9 @@ services:
       - ERR_LOG_FILE=${ERR_LOG_FILE}
       - ELASTICSEARCH=${ELASTICSEARCH}
       - ELASTICSEARCH_INDEX_PATTERN=${ELASTICSEARCH_INDEX_PATTERN}
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - nest-api-boilerplate
 
@@ -57,18 +69,23 @@ services:
   redis:
     image: redis:latest
     container_name: redis
-    command: redis-server --appendonly yes --port ${REDIS_PORT} --requirepass ${REDIS_PASSWORD}
+    command: >
+      sh -c 'redis-server --appendonly yes --port "$${REDIS_PORT:-6379}"
+      $${REDIS_PASSWORD:+--requirepass "$$REDIS_PASSWORD"}'
     restart: always
-    privileged: true
+    environment:
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     volumes:
-      - /data/redis:/data
-      - /usr/local/etc/redis/redis.conf:/usr/local/etc/redis/redis.conf
-      - /var/log/redis:/logs
+      - redis_data:/data
     ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
+      - ${REDIS_PORT:-6379}:${REDIS_PORT:-6379}
     networks:
       - nest-api-boilerplate
 
 networks:
   nest-api-boilerplate:
     external: false
+
+volumes:
+  redis_data:

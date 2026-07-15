@@ -19,7 +19,7 @@ describe('HealthController (e2e)', () => {
   });
 
   afterEach(async () => {
-    await app.close();
+    await app?.close();
   });
 
   it('/health (GET)', async () => {
@@ -39,9 +39,6 @@ describe('HealthController (e2e)', () => {
               storage: {
                 status: expect.stringMatching(/up/i),
               },
-              'nodejs-api': {
-                status: expect.stringMatching(/up/i),
-              },
             },
             error: {},
             info: {
@@ -52,9 +49,6 @@ describe('HealthController (e2e)', () => {
                 status: expect.stringMatching(/up/i),
               },
               storage: {
-                status: expect.stringMatching(/up/i),
-              },
-              'nodejs-api': {
                 status: expect.stringMatching(/up/i),
               },
             },
@@ -75,12 +69,24 @@ describe('HealthController (e2e)', () => {
             .expect(HttpStatus.TOO_MANY_REQUESTS)
             .expect((response) =>
               expect(response.body).toEqual({
+                code: 'TOO_MANY_REQUESTS',
                 message: 'ThrottlerException: Too Many Requests',
+                path: '/health',
+                requestId: expect.any(String),
                 statusCode: 429,
+                timestamp: expect.any(String),
               }),
             );
         }
       }
     }
+  });
+
+  it('/health/live (GET)', async () => {
+    await request.get('/health/live').expect(HttpStatus.OK);
+  });
+
+  it('/health/ready (GET)', async () => {
+    await request.get('/health/ready').expect(HttpStatus.OK);
   });
 });

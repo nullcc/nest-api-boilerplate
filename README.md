@@ -20,7 +20,6 @@ This project aims to provide an API project boilerplate based on [nestjs](https:
     * orm
     * memory
     * disk
-    * http
   * Rate limiting
   * Caching
 * Task Scheduling
@@ -126,6 +125,45 @@ Run all tests at once without distinguishing test types:
 ```shell
 $ npm run test
 ```
+
+E2E tests require PostgreSQL and IntegreSQL. For local development, start the
+development infrastructure first:
+
+```shell
+$ docker compose -f docker-compose-dev-infra.yml --env-file .env up
+```
+
+## Production readiness
+
+This template is JWT-first and does not mount server-side session middleware by
+default. Tokens are accepted from the `Authorization: Bearer` header only.
+
+Before using this template in production:
+
+* Set `NODE_ENV=production`.
+* Use a random `APP_SECRET` with at least 32 characters.
+* Set explicit `ALLOWED_ORIGINS`; wildcard CORS is not allowed by validation in production.
+* Keep `API_DOCS_ENABLED=false` unless the deployment is private.
+* Configure database pool variables:
+  * `DATABASE_POOL_MAX`
+  * `DATABASE_POOL_IDLE_TIMEOUT_MS`
+  * `DATABASE_POOL_CONNECTION_TIMEOUT_MS`
+* Configure database SSL with `DATABASE_SSL_MODE`; use `verify-ca` or `verify-full` with `DATABASE_SSL_CA` when your platform provides a CA bundle.
+* Run migrations before serving traffic.
+* Use `/health/live` for liveness probes and `/health/ready` for readiness probes.
+
+## CI
+
+GitHub Actions are defined in `.github/workflows/ci.yml`. Reusable CI commands
+live in the `ci/` directory:
+
+```shell
+$ bash ci/validate.sh
+$ bash ci/test-e2e.sh
+```
+
+The CI workflow starts PostgreSQL and IntegreSQL services, then runs build,
+unit tests, and E2E tests.
 
 ## Migrations
 

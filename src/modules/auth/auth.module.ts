@@ -8,9 +8,7 @@ import { UserModule } from '@modules/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
-import { LdapStrategy } from './strategies/ldap.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { SessionSerializer } from './session.serializer';
 import { JWTAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
 
@@ -22,9 +20,9 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
       global: true,
       useFactory: (config: ConfigService) => {
         return {
-          secret: config.get<string>('APP_SECRET'),
+          secret: config.getOrThrow<string>('APP_SECRET'),
           signOptions: {
-            expiresIn: '1d',
+            expiresIn: config.get<string>('JWT_ACCESS_TOKEN_EXPIRES_IN', '15m'),
             algorithm: 'HS384',
           },
           verifyOptions: {
@@ -41,7 +39,6 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
     LocalStrategy,
     // LdapStrategy,
     JwtStrategy,
-    SessionSerializer,
     // Enable authentication globally
     // https://docs.nestjs.com/security/authentication#enable-authentication-globally
     {

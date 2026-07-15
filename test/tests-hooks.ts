@@ -41,7 +41,9 @@ export async function initializeIntegreSQL() {
   return hash;
 }
 
-export async function bootstrapApp(hash: string): Promise<NestExpressApplication> {
+export async function bootstrapApp(
+  hash: string,
+): Promise<NestExpressApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   })

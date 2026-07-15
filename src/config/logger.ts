@@ -10,7 +10,12 @@ import pinoElastic, {
 
 import { ConfigService } from '@nestjs/config';
 
-const passUrl = new Set(['/health', '/graphql']);
+const passUrl = new Set([
+  '/health',
+  '/health/live',
+  '/health/ready',
+  '/graphql',
+]);
 
 const getStreams = (config: ConfigService) => {
   // https://getpino.io/#/docs/help?id=log-to-different-streams
@@ -84,7 +89,8 @@ export const getLoggerOptions = (config: ConfigService): Params => {
         // timestamp: stdTimeFunctions.isoTime,
         level: 'trace',
         quietReqLogger: true,
-        genReqId: (req): ReqId => (<Request>req).header('X-Request-Id') ?? nanoid(),
+        genReqId: (req): ReqId =>
+          (<Request>req).header('X-Request-Id') ?? nanoid(),
         autoLogging: {
           ignore: (req) => passUrl.has((<Request>req).originalUrl),
         },

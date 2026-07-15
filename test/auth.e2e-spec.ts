@@ -28,7 +28,7 @@ describe('AuthController (e2e)', () => {
   });
 
   afterEach(async () => {
-    await app.close();
+    await app?.close();
   });
 
   it.each([
@@ -63,7 +63,7 @@ describe('AuthController (e2e)', () => {
     },
   );
 
-  it('should get session user', async () => {
+  it('should get authenticated user', async () => {
     const {
       header: { authorization },
     } = await request

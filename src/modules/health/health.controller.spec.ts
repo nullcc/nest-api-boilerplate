@@ -4,7 +4,6 @@ import {
   MemoryHealthIndicator,
   TypeOrmHealthIndicator,
   DiskHealthIndicator,
-  HttpHealthIndicator,
 } from '@nestjs/terminus';
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -51,12 +50,6 @@ describe('HealthController', () => {
             checkStorage: jest.fn().mockImplementation(getStatus),
           });
         }
-
-        if (Object.is(token, HttpHealthIndicator)) {
-          return createMock<HttpHealthIndicator>({
-            pingCheck: jest.fn().mockImplementation(getStatus),
-          });
-        }
       })
       .compile();
 
@@ -85,12 +78,15 @@ describe('HealthController', () => {
             "status": "up",
           },
         },
-        {
-          "nodejs-api": {
-            "status": "up",
-          },
-        },
       ]
     `);
+  });
+
+  it('should check readiness', async () => {
+    await expect(controller.ready()).resolves.toHaveLength(3);
+  });
+
+  it('should check liveness without dependencies', async () => {
+    await expect(controller.live()).resolves.toEqual([]);
   });
 });

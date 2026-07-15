@@ -7,10 +7,12 @@ import { useContainer } from 'class-validator';
 
 import { middleware } from './app.middleware';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from '@libs/http/filters/http-exception.filter';
 
 const setupLogger = (app: NestExpressApplication) => {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter(app.get(Logger)));
 };
 
 const setupApiDoc = (app: NestExpressApplication) => {

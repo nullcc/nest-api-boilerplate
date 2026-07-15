@@ -20,7 +20,6 @@
     * orm
     * memory
     * disk
-    * http
   * Rate limiting
   * Caching
 * Task Scheduling
@@ -126,6 +125,43 @@ $ npm run test:e2e
 ```shell
 $ npm run test
 ```
+
+端到端测试依赖 PostgreSQL 和 IntegreSQL。本地运行前，请先启动开发基础设施：
+
+```shell
+$ docker compose -f docker-compose-dev-infra.yml --env-file .env up
+```
+
+## 生产就绪说明
+
+本模版默认采用 JWT-first 的 API 认证模型，不默认挂载服务端 session 中间件。
+Token 只从 `Authorization: Bearer` 请求头读取。
+
+投入生产前，请确认：
+
+* 设置 `NODE_ENV=production`。
+* 使用至少 32 位的随机 `APP_SECRET`。
+* 明确配置 `ALLOWED_ORIGINS`；生产环境校验不允许隐式使用通配 CORS。
+* 除非部署在私有网络内，否则保持 `API_DOCS_ENABLED=false`。
+* 配置数据库连接池变量：
+  * `DATABASE_POOL_MAX`
+  * `DATABASE_POOL_IDLE_TIMEOUT_MS`
+  * `DATABASE_POOL_CONNECTION_TIMEOUT_MS`
+* 通过 `DATABASE_SSL_MODE` 配置数据库 SSL；当使用 `verify-ca` 或 `verify-full` 时，需要同时配置 `DATABASE_SSL_CA`。
+* 在服务接收流量前先运行数据库迁移。
+* 使用 `/health/live` 作为 liveness probe，使用 `/health/ready` 作为 readiness probe。
+
+## CI
+
+GitHub Actions 定义在 `.github/workflows/ci.yml`。可复用的 CI 命令放在
+`ci/` 目录下：
+
+```shell
+$ bash ci/validate.sh
+$ bash ci/test-e2e.sh
+```
+
+CI 会启动 PostgreSQL 和 IntegreSQL 服务，然后运行构建、单元测试和端到端测试。
 
 ## 数据库迁移
 

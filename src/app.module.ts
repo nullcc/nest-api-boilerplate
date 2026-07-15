@@ -65,10 +65,17 @@ import { AppController } from '@src/app.controller';
       useFactory: async (
         config: ConfigService,
       ): Promise<RedisModuleOptions> => {
+        if (!config.get<string>('REDIS_HOST')) {
+          return {
+            config: undefined,
+            readyLog: false,
+            errorLog: false,
+          };
+        }
         return {
           config: {
-            host: config.get<string>('REDIS_HOST'),
-            port: config.get<number>('REDIS_PORT'),
+            host: config.getOrThrow<string>('REDIS_HOST'),
+            port: config.get<number>('REDIS_PORT') || 6379,
             password: config.get<string>('REDIS_PASSWORD'),
           },
         };

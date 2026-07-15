@@ -1,5 +1,6 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { randomUUID } from 'crypto';
 
 import { SignUp } from './dtos/sign-up.dto';
 import { User } from '@modules/user/entities/user.entity';
@@ -26,7 +27,7 @@ export class AuthService {
     let user: User;
     try {
       user = await this.userService.findOne({ where: { email } });
-    } catch (err) {
+    } catch {
       throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
     }
     if (
@@ -44,7 +45,7 @@ export class AuthService {
       user = await this.userService.findOne({
         where: { email: payload.email },
       });
-    } catch (err) {
+    } catch {
       throw new UnauthorizedException();
     }
     if (user.status !== Status.Enabled) {
@@ -54,7 +55,9 @@ export class AuthService {
   }
 
   signToken(user: User): string {
-    const payload = {
+    const payload: JwtPayload = {
+      sub: String(user.id),
+      jti: randomUUID(),
       id: user.id,
       email: user.email,
       name: user.name,

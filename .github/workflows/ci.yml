@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: nestjs
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -h 127.0.0.1"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+      integresql:
+        image: ghcr.io/allaboutapps/integresql:latest
+        env:
+          INTEGRESQL_PGHOST: postgres
+          INTEGRESQL_PGUSER: postgres
+          INTEGRESQL_PGPASSWORD: postgres
+          INTEGRESQL_PGDATABASE: nestjs
+        ports:
+          - 5000:5000
+
+    env:
+      APP_SECRET: ci-secret-with-at-least-thirty-two-characters
+      ALLOWED_ORIGINS: http://localhost:3000
+      API_DOCS_ENABLED: "false"
+      JWT_ACCESS_TOKEN_EXPIRES_IN: 15m
+      DATABASE_HOST: localhost
+      DATABASE_PORT: "5432"
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: nestjs
+      DATABASE_LOGGING: "false"
+      DATABASE_POOL_MAX: "10"
+      DATABASE_POOL_IDLE_TIMEOUT_MS: "30000"
+      DATABASE_POOL_CONNECTION_TIMEOUT_MS: "5000"
+      DATABASE_SSL_MODE: disable
+      INTEGRESQL_URL: http://localhost:5000
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: bash ci/validate.sh
+      - run: bash ci/test-e2e.sh

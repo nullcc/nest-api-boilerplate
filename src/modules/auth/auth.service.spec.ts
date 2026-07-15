@@ -8,6 +8,7 @@ import { UserService } from '@modules/user/services/user.service';
 import { AuthService } from './auth.service';
 import type { SignUp } from './dtos/sign-up.dto';
 import type { JwtPayload } from './interfaces/jwt-payload.interface';
+import { Status } from '@modules/user/enums/status.enum';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -62,6 +63,7 @@ describe('AuthService', () => {
     mockedUserService.findOne.mockResolvedValueOnce(
       createMock<User>({
         email,
+        status: Status.Enabled,
         checkPassword: jest.fn().mockResolvedValue(true),
       }),
     );
@@ -79,9 +81,7 @@ describe('AuthService', () => {
 
     await expect(
       service.login(email, password),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"There isn't any user with email: notfound@example.com"`,
-    );
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Invalid credentials"`);
   });
 
   it('should throw on log in when the email not exist', async () => {
@@ -92,14 +92,30 @@ describe('AuthService', () => {
     mockedUserService.findOne.mockResolvedValueOnce(
       createMock<User>({
         email,
+        status: Status.Enabled,
         checkPassword: jest.fn().mockResolvedValue(false),
       }),
     );
 
     await expect(
       service.login(email, password),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Wrong password for user with email: john@doe.me"`,
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Invalid credentials"`);
+  });
+
+  it('should reject disabled users on log in', async () => {
+    const email = 'john@doe.me';
+    const password = 'Pa$$w0rd';
+
+    mockedUserService.findOne.mockResolvedValueOnce(
+      createMock<User>({
+        email,
+        status: Status.Disabled,
+        checkPassword: jest.fn().mockResolvedValue(true),
+      }),
+    );
+
+    await expect(service.login(email, password)).rejects.toThrowError(
+      'Invalid credentials',
     );
   });
 
@@ -115,7 +131,7 @@ describe('AuthService', () => {
     };
 
     mockedUserService.findOne.mockResolvedValueOnce(
-      createMock<User>({ email: payload.sub }),
+      createMock<User>({ email: payload.sub, status: Status.Enabled }),
     );
     const user = await service.verifyPayload(payload);
 
@@ -137,8 +153,26 @@ describe('AuthService', () => {
 
     await expect(
       service.verifyPayload(payload),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"There isn't any user with email: notregistered@example.com"`,
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Unauthorized"`);
+  });
+
+  it('should reject disabled users when verifying JWT payload', async () => {
+    const payload: JwtPayload = {
+      sub: '',
+      iat: 0,
+      exp: 0,
+      id: 1,
+      email: 'disabled@example.com',
+      name: 'disabled',
+      roles: ['user'],
+    };
+
+    mockedUserService.findOne.mockResolvedValueOnce(
+      createMock<User>({ email: payload.email, status: Status.Disabled }),
+    );
+
+    await expect(service.verifyPayload(payload)).rejects.toThrowError(
+      'Unauthorized',
     );
   });
 

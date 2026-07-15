@@ -5,6 +5,9 @@ import { SignUp } from './dtos/sign-up.dto';
 import { User } from '@modules/user/entities/user.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { UserService } from '@modules/user/services/user.service';
+import { Status } from '@modules/user/enums/status.enum';
+
+const INVALID_CREDENTIALS_MESSAGE = 'Invalid credentials';
 
 @Injectable()
 export class AuthService {
@@ -24,14 +27,13 @@ export class AuthService {
     try {
       user = await this.userService.findOne({ where: { email } });
     } catch (err) {
-      throw new UnauthorizedException(
-        `There isn't any user with email: ${email}`,
-      );
+      throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
     }
-    if (!(await user.checkPassword(password))) {
-      throw new UnauthorizedException(
-        `Wrong password for user with email: ${email}`,
-      );
+    if (
+      user.status !== Status.Enabled ||
+      !(await user.checkPassword(password))
+    ) {
+      throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
     }
     return user;
   }
@@ -39,11 +41,14 @@ export class AuthService {
   async verifyPayload(payload: JwtPayload): Promise<User> {
     let user: User;
     try {
-      user = await this.userService.findOne({ where: { email: payload.email } });
+      user = await this.userService.findOne({
+        where: { email: payload.email },
+      });
     } catch (err) {
-      throw new UnauthorizedException(
-        `There isn't any user with email: ${payload.email}`,
-      );
+      throw new UnauthorizedException();
+    }
+    if (user.status !== Status.Enabled) {
+      throw new UnauthorizedException();
     }
     return user;
   }

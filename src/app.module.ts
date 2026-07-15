@@ -13,6 +13,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { getLoggerOptions } from '@config/logger';
 import typeORMconfig from '@config/typeorm';
 import { getThrottlerOptions } from '@config/throttler';
+import { validateEnv } from '@config/env.validation';
 import { HealthModule } from '@modules/health/health.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { AuditLogModule } from '@modules/audit-log/audit-log.module';
@@ -26,6 +27,7 @@ import { AppController } from '@src/app.controller';
     ConfigModule.forRoot({
       envFilePath: `.env${process.env.APP_ENV ? '.' + process.env.APP_ENV : ''}`,
       isGlobal: true,
+      validate: validateEnv,
     }),
     // Logger
     // https://getpino.io
@@ -49,7 +51,9 @@ import { AppController } from '@src/app.controller';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        ttl: config.get<string>('CACHE_TTL') ? parseInt(config.get<string>('CACHE_TTL')) : 60000,
+        ttl: config.get<string>('CACHE_TTL')
+          ? parseInt(config.get<string>('CACHE_TTL'))
+          : 60000,
       }),
       isGlobal: true,
     }),

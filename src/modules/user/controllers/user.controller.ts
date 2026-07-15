@@ -30,6 +30,7 @@ import { UpdateUserDto } from '@modules/user/dtos/update-user.dto';
 
 @ApiTags('User')
 @Controller('users')
+@Roles(Role.Admin)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(
@@ -54,7 +55,10 @@ export class UserController {
   @Patch('/:id')
   @ApiResponse({ status: HttpStatus.OK, type: UserResponseDto })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Not Found' })
-  @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: 'Unprocessable Entity' })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Unprocessable Entity',
+  })
   @AuditLog('Update user')
   public update(
     @Param('id') id: number,
@@ -66,7 +70,6 @@ export class UserController {
   @Delete('/:id')
   @ApiResponse({ status: HttpStatus.OK, type: UserResponseDto })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Not Found' })
-  @Roles(Role.Admin)
   @AuditLog('Delete user')
   async delete(@Param('id') id: number) {
     return await this.userService.deleteUser(id);

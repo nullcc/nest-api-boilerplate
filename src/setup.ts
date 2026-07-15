@@ -14,6 +14,13 @@ const setupLogger = (app: NestExpressApplication) => {
 };
 
 const setupApiDoc = (app: NestExpressApplication) => {
+  const docsDisabled =
+    process.env.API_DOCS_ENABLED === 'false' ||
+    process.env.NODE_ENV === 'production';
+  if (docsDisabled) {
+    return;
+  }
+
   // https://docs.nestjs.com/openapi/introduction
   const config = new DocumentBuilder()
     .setTitle('Nest API Boilerplate')
@@ -40,6 +47,7 @@ const setupGlobalPipes = (app: NestExpressApplication) => {
     new ValidationPipe({
       transform: true,
       whitelist: true,
+      forbidNonWhitelisted: true,
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
     }),
   );

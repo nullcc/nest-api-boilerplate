@@ -17,7 +17,7 @@ export const middleware = (app: INestApplication): INestApplication => {
       // Requires 'store' setup for production
       secret: process.env.APP_SECRET,
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
       cookie: {
         httpOnly: true,
         signed: true,

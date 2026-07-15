@@ -7,9 +7,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
+import type { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from '@modules/auth/decorators/route.decorator';
 import { jwtFromRequest } from '@modules/auth/strategies/jwt.strategy';
+import { AuthService } from '@modules/auth/auth.service';
+import { JwtPayload } from '@modules/auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class JWTAuthGuard extends AuthGuard('jwt') {
@@ -17,6 +20,7 @@ export class JWTAuthGuard extends AuthGuard('jwt') {
     private jwtService: JwtService,
     private config: ConfigService,
     private reflector: Reflector,
+    private authService: AuthService,
   ) {
     super();
   }
@@ -36,19 +40,18 @@ export class JWTAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.config.get<string>('APP_SECRET'),
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
+        secret: this.config.getOrThrow<string>('APP_SECRET'),
+        algorithms: ['HS384'],
       });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      request['user'] = payload;
+      request['user'] = await this.authService.verifyPayload(payload);
     } catch {
       throw new UnauthorizedException();
     }
     return true;
   }
 
-  private extractTokenFromRequest(request: Request): string | undefined {
+  private extractTokenFromRequest(request: Request): string | null {
     return jwtFromRequest(request);
   }
 }
